@@ -6,6 +6,10 @@ public class showStateMachine : MonoBehaviour
 {
     private showState curState;
 
+    public GameObject ballPrefab;
+
+    private ballScript curBall;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,7 +19,18 @@ public class showStateMachine : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.D))
+            startShow();
         UpdateState();
+    }
+
+    void startShow()
+    {
+        baseAnimalScript startAnimal = animalManager.Instance.returnFirstAnimal();
+        if (startAnimal == null)
+            Debug.LogError("没有起始动物");
+        curBall = Instantiate(ballPrefab).GetComponent<ballScript>();
+        curBall.doInitialDrop(startAnimal.AcceptPos.position, startAnimal);
     }
 
     public void StartState(showState newState)

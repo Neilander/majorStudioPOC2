@@ -66,4 +66,24 @@ public class animalManager : MonoBehaviour
             allAnimals[index].TakeBall(ball);
         }
     }
+
+    public baseAnimalScript returnFirstAnimal()
+    {
+        foreach (baseAnimalScript an in allAnimals)
+        {
+            if (an != null)
+                return an;
+        }
+        return null;
+    }
+
+    public Vector3 returnAnimalWithIndex(int i, bool ifThrowPos)
+    {
+        return ifThrowPos ? allAnimals[i].throwPos.position :allAnimals[i].AcceptPos.position;
+    }
+
+    public baseAnimalScript returnAnimalBasedOnIndex(int n)
+    {
+        return allAnimals[n];
+    }
 }

@@ -18,6 +18,8 @@ public class baseAnimalScript : MonoBehaviour
     public int baseIndexAdd;
     public float throwTime;
     public float throwHeight;
+    public Transform AcceptPos;
+    public Transform throwPos;
 
     // Start is called before the first frame update
     void Start()
@@ -117,6 +119,8 @@ public class baseAnimalScript : MonoBehaviour
         ChangeRestCount(-1);
         ifReady = true;
     }
+
+    
 
     /// <summary>
     /// 传入小于0的数字会让休息数字关闭
