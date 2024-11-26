@@ -95,7 +95,7 @@ public class baseAnimalScript : MonoBehaviour
     public virtual void InterActWithBall()
     {
         ball.gameObject.SetActive(true);
-        ball.MoveBall(selfIndex, selfIndex+baseIndexAdd, throwTime, throwHeight);
+        ball.MoveBall(selfIndex, selfIndex+baseIndexAdd);
         ChangeDisplay(1);
         ifJustInteract = true;
         ifHaveBall = false;

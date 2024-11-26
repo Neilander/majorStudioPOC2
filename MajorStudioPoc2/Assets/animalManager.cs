@@ -77,13 +77,25 @@ public class animalManager : MonoBehaviour
         return null;
     }
 
-    public Vector3 returnAnimalWithIndex(int i, bool ifThrowPos)
+    public bool returnAnimalWithIndex(int i, bool ifThrowPos,out Vector3 pos)
     {
-        return ifThrowPos ? allAnimals[i].throwPos.position :allAnimals[i].AcceptPos.position;
+        if (allAnimals[i] == null)
+        {
+            pos = Vector3.zero;
+            return false;
+        }
+        pos = ifThrowPos ? allAnimals[i].throwPos.position : allAnimals[i].AcceptPos.position;
+        return true;
     }
 
-    public baseAnimalScript returnAnimalBasedOnIndex(int n)
+    public bool returnAnimalBasedOnIndex(int n, out baseAnimalScript animal)
     {
-        return allAnimals[n];
+        if (allAnimals[n] == null)
+        {
+            animal = null;
+            return false;
+        }
+        animal = allAnimals[n];
+        return true;
     }
 }

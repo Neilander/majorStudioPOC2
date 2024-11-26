@@ -26,6 +26,7 @@ public class ballScript : MonoBehaviour
     public float baseYV = 2f;
     float gravity = 9.8f;
 
+    private showStateMachine curMachine;
 
     //private baseAnimalScript toCatch;
     // Start is called before the first frame update
@@ -52,7 +53,7 @@ public class ballScript : MonoBehaviour
         }
     }
 
-    public void MoveBall(int startIndex, int endIndex, float t, float h)
+    public void MoveBall(int startIndex, int endIndex)
     {
         // Validate indices
         if (points == null || points.Count == 0)
@@ -69,7 +70,10 @@ public class ballScript : MonoBehaviour
 
         if (endIndex < 0 || endIndex >= points.Count)
         {
-            Debug.LogError($"End index {endIndex} is out of range.");
+            //Debug.LogError($"End index {endIndex} is out of range.");
+            isMoving = true; // Set the flag to indicate movement has started
+            
+            StartCoroutine(MoveInParabola(transform.position, transform.position + new Vector3(1, 0, 0), baseYV, gravity, null, curMachine));
             return;
         }
 
@@ -82,11 +86,19 @@ public class ballScript : MonoBehaviour
         isMoving = true; // Set the flag to indicate movement has started
         toIndex = endIndex;
         //StartCoroutine(MoveCoroutine(points[startIndex], points[endIndex], t, h));
-        StartCoroutine(MoveInParabola(animalManager.Instance.returnAnimalWithIndex(startIndex, true), animalManager.Instance.returnAnimalWithIndex(endIndex, false), baseYV+initialYVperUnit*(endIndex-startIndex), gravity, animalManager.Instance.returnAnimalBasedOnIndex(endIndex)));
+        Vector3 pos1;
+        Vector3 pos2;
+        baseAnimalScript an;
+        if(animalManager.Instance.returnAnimalWithIndex(startIndex, true,out pos1) && animalManager.Instance.returnAnimalWithIndex(endIndex, false, out pos2) && animalManager.Instance.returnAnimalBasedOnIndex(endIndex, out an))
+            StartCoroutine(MoveInParabola(pos1,pos2, baseYV+initialYVperUnit*(endIndex-startIndex), gravity, an, curMachine));
+        else
+        {
+            StartCoroutine(MoveInParabola(transform.position,transform.position+new Vector3(1,0,0), baseYV, gravity, null, curMachine));
+        }
     }
 
     
-    public void doInitialDrop(Vector3 toPos, baseAnimalScript toAnimal)
+    public void doInitialDrop(Vector3 toPos, baseAnimalScript toAnimal, showStateMachine machine)
     {
         // 计算初始位置：目标位置上方 height 的位置
         Vector3 startPosition = new Vector3(toPos.x, toPos.y + height, toPos.z);
@@ -94,13 +106,13 @@ public class ballScript : MonoBehaviour
         // 将对象设置到初始位置，并激活
         transform.position = startPosition;
         gameObject.SetActive(true);
-        
+        curMachine = machine;
 
         // 启动协程进行移动
-        StartCoroutine(MoveToPosition(toPos, dropCurve, dropT, toAnimal));
+        StartCoroutine(MoveToPosition(toPos, dropCurve, dropT, toAnimal, machine));
     }
 
-    public IEnumerator MoveToPosition(Vector3 toPos, AnimationCurve curve, float duration, baseAnimalScript toCatch = null)
+    public IEnumerator MoveToPosition(Vector3 toPos, AnimationCurve curve, float duration, baseAnimalScript toCatch = null, showStateMachine machine = null)
     {
         float elapsedTime = 0f; // 已经过的时间
         Vector3 startPosition = transform.position; // 初始位置
@@ -128,6 +140,8 @@ public class ballScript : MonoBehaviour
         transform.position = toPos;
         if (toCatch != null)
             toCatch.TakeBall(this);
+        if (machine != null)
+            machine.reportMoveFinish(this);
     }
 
 
@@ -139,7 +153,7 @@ public class ballScript : MonoBehaviour
     /// <param name="initialYVelocity">初始y方向速度</param>
     /// <param name="gravity">重力加速度</param>
     /// <returns></returns>
-    public IEnumerator MoveInParabola(Vector3 start, Vector3 end, float initialYVelocity, float gravity, baseAnimalScript toCatch)
+    public IEnumerator MoveInParabola(Vector3 start, Vector3 end, float initialYVelocity, float gravity, baseAnimalScript toCatch, showStateMachine callBack = null)
     {
         // 计算竖直方向的运动时间
         float totalTime = CalculateParabolaTime(start.y, end.y, initialYVelocity, gravity);
@@ -182,8 +196,16 @@ public class ballScript : MonoBehaviour
 
         // 确保最终位置准确
         transform.position = end;
-        toCatch.TakeBall(this);
+        if (toCatch != null)
+            toCatch.TakeBall(this);
+        else
+        {
+            Debug.Log("球掉了");
+            curMachine.reportDrop(this);
+        }
         isMoving = false;
+        if (callBack != null)
+            callBack.reportMoveFinish(this);
     }
 
     /// <summary>
