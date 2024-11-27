@@ -7,7 +7,10 @@ public class animalManager : MonoBehaviour
     public static animalManager Instance { get; private set; }
 
     private baseAnimalScript[] allAnimals;
-
+    public Transform rightPos;
+    public Transform leftpos;
+    public List<Transform> basePos;
+    public bool ifShowEnd = false;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -97,5 +100,19 @@ public class animalManager : MonoBehaviour
         }
         animal = allAnimals[n];
         return true;
+    }
+
+    public Vector3 returnEndIndex(bool ifRight)
+    {
+        if (ifRight)
+            return rightPos.position;
+        else
+            return leftpos.position;
+    }
+
+    public Vector3 returnAnimalBasicPos(int n)
+    {
+        int k = Mathf.Clamp(n, 0, 5);
+        return basePos[k].position;
     }
 }

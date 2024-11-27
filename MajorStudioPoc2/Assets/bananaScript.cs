@@ -67,6 +67,8 @@ public class bananaScript : MonoBehaviour
         transform.position = end;
         transform.localScale = targetScale; // 确保最终缩放比例准确
         doBanana();
+        yield return new WaitForSeconds(0.2f);
+        Destroy(gameObject);
     }
 
     /// <summary>
@@ -97,10 +99,14 @@ public class bananaScript : MonoBehaviour
             if (collider.CompareTag("animalTag"))
             {
                 Debug.Log("Detected an object with animalTag: " + collider.gameObject.name);
+                baseAnimalScript animal = collider.GetComponent<baseAnimalScript>();
+                animal.TakeBanana(1);
             }
             else if (collider.CompareTag("ballTag"))
             {
                 Debug.Log("Detected an object with ballTag: " + collider.gameObject.name);
+                ballScript ball = collider.GetComponent<ballScript>();
+                ball.takeBanana();
             }
         }
     }
@@ -110,5 +116,7 @@ public class bananaScript : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, radius);
     }
+
+
 
 }

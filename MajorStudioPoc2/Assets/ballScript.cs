@@ -9,6 +9,7 @@ public class ballScript : MonoBehaviour
     public float baseY; // Base height
     private bool isMoving = false; // Flag to indicate if the ball is currently moving
     private int toIndex;
+    private bool ifRight = true;
 
     [Header("开头掉落")]
     public AnimationCurve dropCurve;
@@ -27,6 +28,9 @@ public class ballScript : MonoBehaviour
     float gravity = 9.8f;
 
     private showStateMachine curMachine;
+
+    private Coroutine curPara;
+    private bool ifDropped = false;
 
     //private baseAnimalScript toCatch;
     // Start is called before the first frame update
@@ -53,6 +57,40 @@ public class ballScript : MonoBehaviour
         }
     }
 
+    public void takeBanana()
+    {
+        if (ifDropped)
+            return;
+        toIndex = toIndex+ (ifRight?1:-1);
+        if (toIndex < 0 || toIndex >= points.Count)
+        {
+            isMoving = true; // Set the flag to indicate movement has started
+            if (curPara != null)
+                StopCoroutine(curPara);
+            curPara = StartCoroutine(MoveInParabola(transform.position, animalManager.Instance.returnEndIndex(!(toIndex<0)), baseYV, gravity, null, curMachine));
+            return;
+            
+        }
+        isMoving = true;
+        Vector3 pos2;
+        baseAnimalScript an;
+        if ( animalManager.Instance.returnAnimalWithIndex(toIndex, false, out pos2) && animalManager.Instance.returnAnimalBasedOnIndex(toIndex, out an))
+        {
+            if (curPara != null)
+                StopCoroutine(curPara);
+            curPara = StartCoroutine(MoveInParabola(transform.position, pos2, baseYV + initialYVperUnit * (pos2.x-transform.position.x)*0.6f, gravity, an, curMachine));
+        }
+        else
+        {
+            if (curPara != null)
+                StopCoroutine(curPara);
+            curPara = StartCoroutine(MoveInParabola(transform.position, animalManager.Instance.returnAnimalBasicPos(toIndex), baseYV, gravity, null, curMachine));
+        }
+
+
+
+    }
+
     public void MoveBall(int startIndex, int endIndex)
     {
         // Validate indices
@@ -72,8 +110,10 @@ public class ballScript : MonoBehaviour
         {
             //Debug.LogError($"End index {endIndex} is out of range.");
             isMoving = true; // Set the flag to indicate movement has started
-            
-            StartCoroutine(MoveInParabola(transform.position, transform.position + new Vector3(1, 0, 0), baseYV, gravity, null, curMachine));
+            if (curPara != null)
+                StopCoroutine(curPara);
+            curPara = StartCoroutine(MoveInParabola(transform.position, transform.position + new Vector3(1, 0, 0), baseYV, gravity, null, curMachine));
+            ifRight = true;
             return;
         }
 
@@ -85,15 +125,25 @@ public class ballScript : MonoBehaviour
 
         isMoving = true; // Set the flag to indicate movement has started
         toIndex = endIndex;
+        if (endIndex - startIndex >= 0)
+            ifRight = true;
+        else
+            ifRight = false;
         //StartCoroutine(MoveCoroutine(points[startIndex], points[endIndex], t, h));
         Vector3 pos1;
         Vector3 pos2;
         baseAnimalScript an;
-        if(animalManager.Instance.returnAnimalWithIndex(startIndex, true,out pos1) && animalManager.Instance.returnAnimalWithIndex(endIndex, false, out pos2) && animalManager.Instance.returnAnimalBasedOnIndex(endIndex, out an))
-            StartCoroutine(MoveInParabola(pos1,pos2, baseYV+initialYVperUnit*(endIndex-startIndex), gravity, an, curMachine));
+        if (animalManager.Instance.returnAnimalWithIndex(startIndex, true, out pos1) && animalManager.Instance.returnAnimalWithIndex(endIndex, false, out pos2) && animalManager.Instance.returnAnimalBasedOnIndex(endIndex, out an))
+        {
+            if (curPara != null)
+                StopCoroutine(curPara);
+            curPara = StartCoroutine(MoveInParabola(pos1, pos2, baseYV + initialYVperUnit * (endIndex - startIndex), gravity, an, curMachine));
+        }
         else
         {
-            StartCoroutine(MoveInParabola(transform.position,transform.position+new Vector3(1,0,0), baseYV, gravity, null, curMachine));
+            if (curPara != null)
+                StopCoroutine(curPara);
+            curPara = StartCoroutine(MoveInParabola(transform.position,transform.position+new Vector3(1,0,0), baseYV, gravity, null, curMachine));
         }
     }
 
@@ -201,6 +251,7 @@ public class ballScript : MonoBehaviour
         else
         {
             Debug.Log("球掉了");
+            ifDropped = true;
             curMachine.reportDrop(this);
         }
         isMoving = false;

@@ -81,6 +81,8 @@ public class baseAnimalScript : MonoBehaviour
 
     public virtual void TakeBanana(int n)
     {
+        if (animalManager.Instance.ifShowEnd)
+            return;
         curRestTurn = Mathf.Max(curRestTurn - n, 0);
         if (curRestTurn == 0)
         {

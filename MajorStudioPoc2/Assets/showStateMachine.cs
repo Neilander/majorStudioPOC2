@@ -43,6 +43,7 @@ public class showStateMachine : MonoBehaviour
             case showState.showStart:
                 startShow();
                 ifBallMoveFinish = false;
+                animalManager.Instance.ifShowEnd = false;
                 break;
 
             case showState.turnStart:
@@ -120,6 +121,7 @@ public class showStateMachine : MonoBehaviour
     public void reportDrop(ballScript ball)
     {
         gameFail = true;
+        animalManager.Instance.ifShowEnd = true;
     }
 }
 
