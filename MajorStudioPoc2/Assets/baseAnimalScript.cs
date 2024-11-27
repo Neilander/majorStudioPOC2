@@ -70,7 +70,8 @@ public class baseAnimalScript : MonoBehaviour
     {
         if (ifHaveBall || (!ifReady))
         {
-            DoDrop();
+
+            b.doDrop();
         }
         else
         {

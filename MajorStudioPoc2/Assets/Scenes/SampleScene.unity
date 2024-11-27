@@ -572,6 +572,10 @@ PrefabInstance:
       propertyPath: selfIndex
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 6923289616350837719, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
+      propertyPath: baseIndexAdd
+      value: -2
+      objectReference: {fileID: 0}
     - target: {fileID: 8403506454095161910, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
       propertyPath: m_Name
       value: basicAnimal (4)
@@ -1188,10 +1192,6 @@ PrefabInstance:
     - target: {fileID: 8403506454095161910, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
       propertyPath: m_Name
       value: basicAnimal (3)
-      objectReference: {fileID: 0}
-    - target: {fileID: 8403506454095161910, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

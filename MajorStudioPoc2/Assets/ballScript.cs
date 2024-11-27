@@ -78,7 +78,7 @@ public class ballScript : MonoBehaviour
         {
             if (curPara != null)
                 StopCoroutine(curPara);
-            curPara = StartCoroutine(MoveInParabola(transform.position, pos2, baseYV + initialYVperUnit * (pos2.x-transform.position.x)*0.6f, gravity, an, curMachine));
+            curPara = StartCoroutine(MoveInParabola(transform.position, pos2, baseYV + initialYVperUnit * (Mathf.Abs(pos2.x-transform.position.x))*0.6f, gravity, an, curMachine));
         }
         else
         {
@@ -93,6 +93,7 @@ public class ballScript : MonoBehaviour
 
     public void MoveBall(int startIndex, int endIndex)
     {
+        Debug.Log("从" + startIndex + "到" + endIndex);
         // Validate indices
         if (points == null || points.Count == 0)
         {
@@ -137,7 +138,7 @@ public class ballScript : MonoBehaviour
         {
             if (curPara != null)
                 StopCoroutine(curPara);
-            curPara = StartCoroutine(MoveInParabola(pos1, pos2, baseYV + initialYVperUnit * (endIndex - startIndex), gravity, an, curMachine));
+            curPara = StartCoroutine(MoveInParabola(pos1, pos2, baseYV + initialYVperUnit * (Mathf.Abs(endIndex - startIndex)), gravity, an, curMachine));
         }
         else
         {
@@ -289,5 +290,10 @@ public class ballScript : MonoBehaviour
         return Mathf.Max(t1, t2);
     }
 
-
+    public void doDrop()
+    {
+        Debug.Log("球掉了");
+        ifDropped = true;
+        curMachine.reportDrop(this);
+    }
 }
