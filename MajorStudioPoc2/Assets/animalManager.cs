@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class animalManager : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class animalManager : MonoBehaviour
     public Transform leftpos;
     public List<Transform> basePos;
     public bool ifShowEnd = false;
+    public List<TextMeshProUGUI> texts;
 
     private scoreScript curDisplay;
     private void Awake()
@@ -58,11 +60,12 @@ public class animalManager : MonoBehaviour
         }
     }
 
-    public void registerAnimal(int n, baseAnimalScript an)
+    public void registerAnimal(int n, baseAnimalScript an, out TextMeshProUGUI coolText)
     {
         if(allAnimals == null)
             allAnimals = new baseAnimalScript[6];
         allAnimals[n] = an;
+        coolText = texts[n];
     }
 
     public void ballToIndex(ballScript ball, int index)
@@ -128,5 +131,24 @@ public class animalManager : MonoBehaviour
     public void changeScore(int n)
     {
         curDisplay.ChangeScore(n);
+    }
+
+    public void reportText(TextMeshProUGUI t, int n)
+    {
+        texts[n] = t;
+        Debug.Log("report！" +( texts[n]==null));
+    }
+
+    public void reportLeftRightPos(Transform t, bool ifLeft)
+    {
+        if (ifLeft)
+            leftpos = t;
+        else
+            rightPos = t;
+    }
+
+    public void reportBasePos(Transform t, int n)
+    {
+        basePos[n] = t;
     }
 }

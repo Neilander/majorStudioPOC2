@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class baseAnimalScript : MonoBehaviour
 {
@@ -25,11 +26,14 @@ public class baseAnimalScript : MonoBehaviour
     public int interactionScore = 50;
 
     private int curState = 0;
+    private TextMeshProUGUI text;
 
+
+    
     // Start is called before the first frame update
     void Start()
     {
-        animalManager.Instance.registerAnimal(selfIndex, this);
+        animalManager.Instance.registerAnimal(selfIndex, this, out text);
         originalScale = transform.localScale; // 记录原始缩放
         curState = -1;
         ChangeDisplay(0);
@@ -141,6 +145,21 @@ public class baseAnimalScript : MonoBehaviour
     internal void ChangeRestCount(int turn)
     {
         curRestTurn = turn;
+        if (text == null)
+            animalManager.Instance.registerAnimal(selfIndex, this, out text);
+        if (turn >= 0)
+        {
+            text.text = curRestTurn.ToString();
+            if (!text.gameObject.activeInHierarchy)
+                text.gameObject.SetActive(true);
+
+        }
+        else
+        {
+            text.gameObject.SetActive(false);
+        }
+        
+
     }
 
     /// <summary>
@@ -149,6 +168,8 @@ public class baseAnimalScript : MonoBehaviour
     /// <param name="toState"></param>
     public virtual void ChangeDisplay(int toState)
     {
+
+
         if (curState == toState)
             return;
 
@@ -161,6 +182,11 @@ public class baseAnimalScript : MonoBehaviour
         {
             Debug.LogWarning("Invalid state index: " + toState);
         }
+
+        if (toState == 2)
+            renderer.color = Color.gray;
+        else
+            renderer.color = Color.white;
     }
 
     private IEnumerator FlipSprite(int toState)
