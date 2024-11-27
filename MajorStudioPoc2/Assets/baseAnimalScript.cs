@@ -31,6 +31,8 @@ public class baseAnimalScript : MonoBehaviour
     {
         animalManager.Instance.registerAnimal(selfIndex, this);
         originalScale = transform.localScale; // 记录原始缩放
+        curState = -1;
+        ChangeDisplay(0);
     }
 
     // Update is called once per frame
