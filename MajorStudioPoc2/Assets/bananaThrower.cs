@@ -5,10 +5,12 @@ using UnityEngine;
 public class bananaThrower : MonoBehaviour
 {
     public GameObject bananaPrefab;
+    public int maxBanana = 20;
+    private int curBanana = 20;
     // Start is called before the first frame update
     void Start()
     {
-        
+        curBanana = maxBanana;
     }
 
     // Update is called once per frame
@@ -16,6 +18,8 @@ public class bananaThrower : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            if (curBanana <= 0)
+                return;
             // 获取鼠标点击位置
             Vector3 mousePosition = Input.mousePosition;
 
@@ -24,6 +28,8 @@ public class bananaThrower : MonoBehaviour
 
             // 调用 throwBanana
             throwBanana(new Vector3(worldPosition.x, worldPosition.y, 0));
+           
+
         }
     }
 
@@ -31,5 +37,7 @@ public class bananaThrower : MonoBehaviour
     {
         bananaScript banana =  Instantiate(bananaPrefab, new Vector3(transform.position.x, transform.position.y,0), Quaternion.identity).GetComponent<bananaScript>();
         banana.ThrowObject(pos);
+        curBanana -= 1;
+        animalManager.Instance.curLeft.changeLeft(curBanana);
     }
 }

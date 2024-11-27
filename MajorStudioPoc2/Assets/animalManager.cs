@@ -16,6 +16,7 @@ public class animalManager : MonoBehaviour
     public List<TextMeshProUGUI> texts;
 
     private scoreScript curDisplay;
+    public bananaLeft curLeft;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -150,5 +151,10 @@ public class animalManager : MonoBehaviour
     public void reportBasePos(Transform t, int n)
     {
         basePos[n] = t;
+    }
+
+    public void reportBananaText(bananaLeft left)
+    {
+        curLeft = left;
     }
 }

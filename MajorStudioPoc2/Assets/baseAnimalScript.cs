@@ -24,6 +24,7 @@ public class baseAnimalScript : MonoBehaviour
     public Transform AcceptPos;
     public Transform throwPos;
     public int interactionScore = 50;
+    public explainType type;
 
     private int curState = 0;
     private TextMeshProUGUI text;
@@ -42,8 +43,32 @@ public class baseAnimalScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (renderer != null)
+        {
+            // 获取鼠标在世界空间中的位置
+            Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            // 检查鼠标是否在 SpriteRenderer 的范围内
+            if (IsMouseOverSprite(mouseWorldPosition, renderer))
+            {
+                Debug.Log("hhhhhh");
+                explainText.Instance.doExplain(type, this);
+            }
+            else
+                explainText.Instance.undoExplain(type, this);
+        }
     }
+
+    private bool IsMouseOverSprite(Vector3 mousePosition, SpriteRenderer spriteRenderer)
+    {
+        // 获取 Sprite 的边界
+        Bounds bounds = spriteRenderer.bounds;
+
+        // 仅检查 2D 平面上的位置（忽略 Z 轴）
+        return bounds.Contains(new Vector3(mousePosition.x, mousePosition.y, bounds.center.z));
+    }
+
+    
 
     public void DoTurnStart()
     {
