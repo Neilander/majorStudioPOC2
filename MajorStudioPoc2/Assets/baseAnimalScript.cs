@@ -7,10 +7,12 @@ public class baseAnimalScript : MonoBehaviour
     internal bool ifReady = true;
     public List<Sprite> displaySprites;
     public SpriteRenderer renderer;
+    public float flipDuration = 0.5f;
     internal bool ifHaveBall;
     internal bool ifJustInteract;
     internal int curRestTurn;
     internal ballScript ball;
+    private Vector3 originalScale;
 
     [Header("动物基础数值")]
     public int restTurn;
@@ -22,10 +24,13 @@ public class baseAnimalScript : MonoBehaviour
     public Transform throwPos;
     public int interactionScore = 50;
 
+    private int curState = 0;
+
     // Start is called before the first frame update
     void Start()
     {
         animalManager.Instance.registerAnimal(selfIndex, this);
+        originalScale = transform.localScale; // 记录原始缩放
     }
 
     // Update is called once per frame
@@ -142,22 +147,52 @@ public class baseAnimalScript : MonoBehaviour
     /// <param name="toState"></param>
     public virtual void ChangeDisplay(int toState)
     {
-        switch (toState)
+        if (curState == toState)
+            return;
+
+        curState = toState;
+        if (toState >= 0 && toState < displaySprites.Count)
         {
-            case 0:
-                renderer.color = Color.white;
-                break;
-
-            case 1:
-                renderer.color = Color.green;
-                break;
-
-            case 2:
-                renderer.color = Color.red;
-                break;
-
-            default:
-                break;
+            StartCoroutine(FlipSprite(toState));
         }
+        else
+        {
+            Debug.LogWarning("Invalid state index: " + toState);
+        }
+    }
+
+    private IEnumerator FlipSprite(int toState)
+    {
+        float halfDuration = flipDuration / 2f; // 翻转一半的时间
+        Vector3 scale = transform.localScale;
+
+        // 第一阶段：逐渐缩小到 0
+        float elapsedTime = 0f;
+        while (elapsedTime < halfDuration)
+        {
+            float t = elapsedTime / halfDuration;
+            transform.localScale = Vector3.Lerp(originalScale, new Vector3(0, originalScale.y, originalScale.z), t);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // 确保缩放为 0
+        transform.localScale = new Vector3(0, originalScale.y, originalScale.z);
+
+        // 更改 Sprite
+        renderer.sprite = displaySprites[toState];
+
+        // 第二阶段：逐渐恢复到原始缩放
+        elapsedTime = 0f;
+        while (elapsedTime < halfDuration)
+        {
+            float t = elapsedTime / halfDuration;
+            transform.localScale = Vector3.Lerp(new Vector3(0, originalScale.y, originalScale.z), originalScale, t);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // 确保缩放恢复原值
+        transform.localScale = originalScale;
     }
 }
