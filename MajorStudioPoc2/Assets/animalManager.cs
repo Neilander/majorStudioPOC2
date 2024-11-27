@@ -11,6 +11,8 @@ public class animalManager : MonoBehaviour
     public Transform leftpos;
     public List<Transform> basePos;
     public bool ifShowEnd = false;
+
+    private scoreScript curDisplay;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -114,5 +116,15 @@ public class animalManager : MonoBehaviour
     {
         int k = Mathf.Clamp(n, 0, 5);
         return basePos[k].position;
+    }
+
+    public void reportScoreText(scoreScript score)
+    {
+        curDisplay = score;
+    }
+
+    public void changeScore(int n)
+    {
+        curDisplay.ChangeScore(n);
     }
 }

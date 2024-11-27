@@ -20,6 +20,7 @@ public class baseAnimalScript : MonoBehaviour
     public float throwHeight;
     public Transform AcceptPos;
     public Transform throwPos;
+    public int interactionScore = 50;
 
     // Start is called before the first frame update
     void Start()
@@ -101,6 +102,7 @@ public class baseAnimalScript : MonoBehaviour
         ChangeDisplay(1);
         ifJustInteract = true;
         ifHaveBall = false;
+        animalManager.Instance.changeScore(interactionScore);
         ifReady = false;
     }
 
