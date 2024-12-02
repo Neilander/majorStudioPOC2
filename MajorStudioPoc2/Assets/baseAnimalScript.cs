@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class baseAnimalScript : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class baseAnimalScript : MonoBehaviour
     internal ballScript ball;
     private Vector3 originalScale;
 
+
+    
     [Header("动物基础数值")]
     public int restTurn;
     public int selfIndex;
@@ -28,7 +31,7 @@ public class baseAnimalScript : MonoBehaviour
 
     //这是展示用的
     private int curState = 0;
-    private TextMeshProUGUI text;
+    public TextMeshProUGUI text;
 
 
     private animalSceneState Scene_curState;
@@ -38,11 +41,12 @@ public class baseAnimalScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         animalManager.Instance.registerAnimal(selfIndex, this, out text);
         originalScale = transform.localScale; // 记录原始缩放
         curState = -1;
         ChangeDisplay(0);
-        StartState(animalSceneState.inShop);
+        //StartState(animalSceneState.inShop);
     }
 
     // Update is called once per frame
@@ -64,6 +68,11 @@ public class baseAnimalScript : MonoBehaviour
             else
                 explainText.Instance.undoExplain(type, this);
         }*/
+
+        if (isMoving)
+        {
+            MoveTowardsTarget();
+        }
     }
 
     public void StartState(animalSceneState newState)
@@ -99,6 +108,7 @@ public class baseAnimalScript : MonoBehaviour
         {
             case animalSceneState.inShop:
                 HandleInShopState();
+                
                 break;
 
             case animalSceneState.inShow:
@@ -109,7 +119,7 @@ public class baseAnimalScript : MonoBehaviour
     #region drag module
     void HandleInShopState()
     {
-        if (Input.GetMouseButtonDown(0)) // 鼠标左键按下
+        if (Input.GetMouseButtonDown(0)&& canBeDrag) // 鼠标左键按下
         {
             // 将鼠标屏幕坐标转换为世界坐标
             Vector2 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -166,13 +176,78 @@ public class baseAnimalScript : MonoBehaviour
 
     void OnMouseRelease()
     {
+        Debug.Log("至少到这里了");
         if (isDragging) // 仅在拖动状态下执行释放逻辑
         {
             isDragging = false;
             Debug.Log($"{gameObject.name}: Stop dragging!");
-            canBeDrag = true;
+            //canBeDrag = true;
+            animalManager.Instance.handleMoveToPosAfterDrag(selfIndex, this);
         }
     }
+
+    public void setDragable() { canBeDrag = true; }
+    #endregion
+
+    #region moveModule
+    [Header("moveModule")]
+    public float moveDuration = 1.0f; // 移动所需时间
+    public AnimationCurve moveCurve = AnimationCurve.EaseInOut(0, 0, 1, 1); // 自定义移动曲线
+    private bool isMoving = false; // 是否正在移动
+    private Vector3 startPosition; // 起始位置
+    private Vector3 targetPosition; // 目标位置
+    private float elapsedTime = 0; // 累计时间
+    private Action onMoveComplete; // 移动完成后的回调
+
+    /// <summary>
+    /// 开始平滑移动到指定位置
+    /// </summary>
+    /// <param name="destination">目标位置 (Vector2)，内部自动转换为 Z=0 的 Vector3</param>
+    /// <param name="onComplete">可选的回调，移动完成后执行</param>
+    public void MoveTo(Vector2 destination, Action onComplete = null)
+    {
+        startPosition = transform.position; // 记录起始位置
+        targetPosition = new Vector3(destination.x, destination.y, 0); // 转换目标位置为 Vector3
+        onMoveComplete = onComplete; // 存储回调
+        elapsedTime = 0; // 重置计时
+        isMoving = true; // 开始移动
+    }
+
+    public void MoveToForDrag(Vector2 destination)
+    {
+        startPosition = transform.position; // 记录起始位置
+        targetPosition = new Vector3(destination.x, destination.y, 0); // 转换目标位置为 Vector3
+        onMoveComplete = () => { canBeDrag = true; };
+        elapsedTime = 0; // 重置计时
+        isMoving = true; // 开始移动
+    }
+
+    /// <summary>
+    /// 平滑移动到目标点
+    /// </summary>
+    private void MoveTowardsTarget()
+    {
+        if (!isMoving) return;
+
+        // 增加时间
+        elapsedTime += Time.deltaTime;
+        float t = Mathf.Clamp01(elapsedTime / moveDuration); // 归一化时间 [0, 1]
+
+        // 根据曲线计算插值
+        float curveValue = moveCurve.Evaluate(t);
+        transform.position = Vector3.Lerp(startPosition, targetPosition, curveValue);
+
+        // 检测是否完成移动
+        if (t >= 1.0f)
+        {
+            transform.position = targetPosition; // 确保完全对齐
+            isMoving = false; // 停止移动
+
+            // 执行回调（如果存在）
+            onMoveComplete?.Invoke();
+        }
+    }
+
     #endregion
 
     private bool IsMouseOverSprite(Vector3 mousePosition, SpriteRenderer spriteRenderer)
@@ -285,9 +360,13 @@ public class baseAnimalScript : MonoBehaviour
     /// <param name="turn"></param>
     internal void ChangeRestCount(int turn)
     {
+        if (selfIndex >= 6)
+            return;
         curRestTurn = turn;
         if (text == null)
             animalManager.Instance.registerAnimal(selfIndex, this, out text);
+
+        
         if (turn >= 0)
         {
             text.text = curRestTurn.ToString();
