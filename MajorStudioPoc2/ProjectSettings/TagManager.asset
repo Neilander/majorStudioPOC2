@@ -46,6 +46,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: ball
+    uniqueID: 4003792817
+    locked: 0
   - name: banana
     uniqueID: 3170964701
     locked: 0

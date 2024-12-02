@@ -26,9 +26,13 @@ public class baseAnimalScript : MonoBehaviour
     public int interactionScore = 50;
     public explainType type;
 
+    //这是展示用的
     private int curState = 0;
     private TextMeshProUGUI text;
 
+
+    private animalSceneState Scene_curState;
+    private bool canBeDrag = false;
 
     
     // Start is called before the first frame update
@@ -38,11 +42,14 @@ public class baseAnimalScript : MonoBehaviour
         originalScale = transform.localScale; // 记录原始缩放
         curState = -1;
         ChangeDisplay(0);
+        StartState(animalSceneState.inShop);
     }
 
     // Update is called once per frame
     void Update()
     {
+        UpdateState();
+        /*
         if (renderer != null)
         {
             // 获取鼠标在世界空间中的位置
@@ -56,8 +63,117 @@ public class baseAnimalScript : MonoBehaviour
             }
             else
                 explainText.Instance.undoExplain(type, this);
+        }*/
+    }
+
+    public void StartState(animalSceneState newState)
+    {
+        EndState(Scene_curState);
+        switch (newState)
+        {
+            case animalSceneState.inShop:
+                canBeDrag = true;
+                break;
+
+            case animalSceneState.inShow:
+                break;
+        }
+        Scene_curState = newState;
+    }
+
+    void EndState(animalSceneState lastState)
+    {
+        switch (lastState)
+        {
+            case animalSceneState.inShop:
+                break;
+
+            case animalSceneState.inShow:
+                break;
         }
     }
+
+    void UpdateState()
+    {
+        switch (Scene_curState)
+        {
+            case animalSceneState.inShop:
+                HandleInShopState();
+                break;
+
+            case animalSceneState.inShow:
+                break;
+        }
+    }
+
+    #region drag module
+    void HandleInShopState()
+    {
+        if (Input.GetMouseButtonDown(0)) // 鼠标左键按下
+        {
+            // 将鼠标屏幕坐标转换为世界坐标
+            Vector2 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            // 从鼠标位置发出 2D 射线
+            RaycastHit2D hit = Physics2D.Raycast(mouseWorldPosition, Vector2.zero);
+
+            // 检测射线是否命中
+            if (hit.collider != null)
+            {
+                if (hit.collider.gameObject == gameObject) // 检查命中的是否是自己
+                {
+                    OnMouseDragStart(hit.point); // 开始拖动
+                }
+            }
+        }
+
+        if (Input.GetMouseButton(0) && isDragging) // 鼠标左键按住且正在拖动
+        {
+            OnMouseDrag();
+        }
+
+        if (Input.GetMouseButtonUp(0)) // 鼠标左键松开
+        {
+            OnMouseRelease(); // 停止拖动
+        }
+    }
+
+    // 是否正在拖动
+    private bool isDragging = false;
+    // 拖动起始点的偏移
+    private Vector3 dragOffset;
+
+    void OnMouseDragStart(Vector3 hitPoint)
+    {
+        isDragging = true;
+        dragOffset = transform.position - hitPoint; // 记录点击点与对象中心的偏移
+        Debug.Log($"{gameObject.name}: Start dragging!");
+        canBeDrag = false;
+
+    }
+
+    void OnMouseDrag()
+    {
+        // 获取鼠标屏幕坐标并转换为世界坐标
+        Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        // 将 Z 坐标设置为 0（适用于 2D 平面）
+        mouseWorldPosition.z = 0;
+
+        // 更新拖动对象的位置，考虑偏移
+        transform.position = mouseWorldPosition + dragOffset;
+    }
+
+    void OnMouseRelease()
+    {
+        if (isDragging) // 仅在拖动状态下执行释放逻辑
+        {
+            isDragging = false;
+            Debug.Log($"{gameObject.name}: Stop dragging!");
+            canBeDrag = true;
+        }
+    }
+    #endregion
 
     private bool IsMouseOverSprite(Vector3 mousePosition, SpriteRenderer spriteRenderer)
     {
@@ -248,4 +364,12 @@ public class baseAnimalScript : MonoBehaviour
         // 确保缩放恢复原值
         transform.localScale = originalScale;
     }
+}
+
+
+public enum animalSceneState
+{
+    empty,
+    inShop,
+    inShow
 }
