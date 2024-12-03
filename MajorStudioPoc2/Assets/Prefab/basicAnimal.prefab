@@ -210,6 +210,8 @@ MonoBehaviour:
   interactionScore: 50
   type: 0
   text: {fileID: 0}
+  Scene_curState: 0
+  canBeDrag: 0
   moveDuration: 0.5
   moveCurve:
     serializedVersion: 2
@@ -262,6 +264,9 @@ MonoBehaviour:
     m_RotationOrder: 4
   swayAngle: 15
   swaySpeed: 8
+  shakeAmount: 0.2
+  shakeSpeed: 40
+  shakeDuration: 0.5
 --- !u!61 &7451392540706807522
 BoxCollider2D:
   m_ObjectHideFlags: 0

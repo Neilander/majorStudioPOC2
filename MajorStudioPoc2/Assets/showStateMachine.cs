@@ -45,6 +45,7 @@ public class showStateMachine : MonoBehaviour
                 startShow();
                 ifBallMoveFinish = false;
                 animalManager.Instance.ifShowEnd = false;
+                gameFail = false;
                 break;
 
             case showState.turnStart:
@@ -56,6 +57,7 @@ public class showStateMachine : MonoBehaviour
             case showState.turnEnd:
                 animalManager.Instance.turnEnd();
                 ifendTurnAnimationFinish = false;
+                
                 Invoke("changeAnimationFinishState", endTurnWaitTime);
                 break;
 
@@ -84,6 +86,7 @@ public class showStateMachine : MonoBehaviour
                     StartState(showState.turnStart);
 
                 }
+                Debug.Log("难道在这里？");
                 break;
 
             case showState.turnStart:
@@ -93,6 +96,7 @@ public class showStateMachine : MonoBehaviour
                     StartState(gameFail?showState.gameEnd: showState.turnEnd);
 
                 }
+                Debug.Log("回合阶段");
                 break;
 
             case showState.turnEnd:
@@ -101,6 +105,7 @@ public class showStateMachine : MonoBehaviour
                     StartState(showState.turnStart);
                     
                 }
+                Debug.Log("回合结束阶段");
                 break;
 
             default:
@@ -110,6 +115,7 @@ public class showStateMachine : MonoBehaviour
 
     public void reportMoveFinish(ballScript ball)
     {
+        Debug.Log("我来拉");
         if (ball == curBall)
             ifBallMoveFinish = true;
     }
@@ -122,7 +128,8 @@ public class showStateMachine : MonoBehaviour
     public void reportDrop(ballScript ball)
     {
         gameFail = true;
-        animalManager.Instance.ifShowEnd = true;
+
+        animalManager.Instance.doShowEnd();
     }
 }
 

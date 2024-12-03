@@ -248,7 +248,10 @@ public class ballScript : MonoBehaviour
         // 确保最终位置准确
         transform.position = end;
         if (toCatch != null)
+        {
             toCatch.TakeBall(this);
+            Debug.Log("到达这里了");
+        }   
         else
         {
             Debug.Log("球掉了");
@@ -295,5 +298,30 @@ public class ballScript : MonoBehaviour
         Debug.Log("球掉了");
         ifDropped = true;
         curMachine.reportDrop(this);
+        StartCoroutine(FadeOut());
+    }
+
+
+    public SpriteRenderer spriteRenderer; // 目标 SpriteRenderer
+    public float fadeDuration = 1.0f; // 渐变持续时间
+
+    private IEnumerator FadeOut()
+    {
+        Color originalColor = spriteRenderer.color; // 获取初始颜色
+        float elapsedTime = 0f;
+
+        while (elapsedTime < fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float alpha = Mathf.Lerp(originalColor.a, 0, elapsedTime / fadeDuration); // 计算新的 Alpha 值
+            spriteRenderer.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha); // 设置颜色
+            yield return null; // 等待下一帧
+        }
+
+        // 确保完全透明
+        spriteRenderer.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0);
+
+        // 销毁 GameObject
+        Destroy(gameObject);
     }
 }

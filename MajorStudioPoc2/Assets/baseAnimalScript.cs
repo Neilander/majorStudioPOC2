@@ -85,6 +85,7 @@ public class baseAnimalScript : MonoBehaviour
                 break;
 
             case animalSceneState.inShow:
+                doShowEnd();
                 break;
         }
     }
@@ -104,8 +105,24 @@ public class baseAnimalScript : MonoBehaviour
         }
     }
 
+    void doShowEnd()
+    {
+        curRestTurn = 0;
+        ifJustInteract = false;
+        ifHaveBall = false;
+        ifReady = true;
+        ChangeDisplay(0);
+        ChangeRestCount(-1);
+        Invoke("reportFlipFinish", 1f);
+    }
+
+    void reportFlipFinish()
+    {
+        animalManager.Instance.reportFlipEnd(this);
+    }
+
     #region drag module
-    
+
     void HandleInShopState()
     {
 
@@ -312,6 +329,7 @@ public class baseAnimalScript : MonoBehaviour
 
     public virtual void TakeBall(ballScript b)
     {
+        
         if (ifHaveBall || (!ifReady))
         {
 
@@ -509,6 +527,74 @@ public class baseAnimalScript : MonoBehaviour
     }
 
     #endregion
+
+
+    #region shakeModule
+
+    public float shakeAmount = 1f; // 左右晃动的距离
+    public float shakeSpeed = 2f;  // 晃动的速度
+    public float shakeDuration = 2f; // 晃动持续时间
+    private Coroutine shakeCoroutine;
+
+    /// <summary>
+    /// 启动晃动
+    /// </summary>
+    public void StartShaking()
+    {
+        // 如果有正在运行的协程，先停止
+        if (shakeCoroutine != null)
+        {
+            StopCoroutine(shakeCoroutine);
+            shakeCoroutine = null;
+        }
+
+        // 启动新的晃动协程
+        shakeCoroutine = StartCoroutine(Shake(null));
+    }
+
+    public void StartShakingForEndShow()
+    {
+        // 如果有正在运行的协程，先停止
+        if (shakeCoroutine != null)
+        {
+            StopCoroutine(shakeCoroutine);
+            shakeCoroutine = null;
+        }
+
+        // 启动新的晃动协程
+        shakeCoroutine = StartCoroutine(Shake(() => { StartState(animalSceneState.empty); }));
+    }
+
+    /// <summary>
+    /// 晃动的协程
+    /// </summary>
+    private IEnumerator Shake(Action endAction)
+    {
+        float timer = 0f;
+        float elapsedTime = 0f;
+        Vector3 startPosition = transform.localPosition; // 记录初始位置
+
+        while (elapsedTime < shakeDuration)
+        {
+            timer += Time.deltaTime * shakeSpeed;
+            elapsedTime += Time.deltaTime;
+
+            float offset = Mathf.Sin(timer) * shakeAmount; // 使用正弦函数计算左右偏移量
+            transform.localPosition = new Vector3(startPosition.x + offset, startPosition.y, startPosition.z); // 应用偏移
+
+            yield return null; // 等待下一帧
+        }
+
+        // 恢复到初始位置
+        transform.localPosition = startPosition;
+
+        // 结束晃动
+        shakeCoroutine = null;
+        endAction?.Invoke();
+    }
+    #endregion
+
+    
 }
 
 

@@ -31,6 +31,7 @@ public class animalManager : MonoBehaviour
     public bool canStartShow = true;
 
     private showStateMachine showManager;
+    private rollAnimal shopManager;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -197,6 +198,11 @@ public class animalManager : MonoBehaviour
         showManager = ma;
     }
 
+    public void registerShopManger(rollAnimal roll)
+    {
+        shopManager = roll;
+    }
+
     /*
      * 关于移动交互的
      */
@@ -345,8 +351,47 @@ public class animalManager : MonoBehaviour
         showManager.StartState(showState.showStart);
     }
 
+    void StartShop()
+    {
+        isShop = true;
+        shopManager.inShopStart_WhenTurnStart();
+
+
+    }
+
     public void reportStartDrag()
     {
         canStartShow = false;
+    }
+
+    public void doShowEnd()
+    {
+        ifShowEnd = true;
+        isShow = false;
+        foreach (baseAnimalScript an in allAnimals)
+            an.StartShakingForEndShow();
+        clearCheckForShowEndFlip();
+    }
+
+    private List<baseAnimalScript> toCheckAnimalsShowEndFlip;
+    //private bool ifBananaReach;
+    public void clearCheckForShowEndFlip()
+    {
+        toCheckAnimalsShowEndFlip = new List<baseAnimalScript>();
+        
+        foreach (baseAnimalScript an in allAnimals)
+        {
+            if (an != null)
+                toCheckAnimalsShowEndFlip.Add(an);
+        }
+    }
+
+    public void reportFlipEnd(baseAnimalScript an)
+    {
+        if (toCheckAnimalsShowEndFlip.Contains(an))
+            toCheckAnimalsShowEndFlip.Remove(an);
+
+        if (toCheckAnimalsShowEndFlip.Count == 0)
+            StartShop();
     }
 }

@@ -204,6 +204,8 @@ MonoBehaviour:
   testBtn: 0
   initialYVperUnit: 2
   baseYV: 4
+  spriteRenderer: {fileID: 275535089002934223}
+  fadeDuration: 1
 --- !u!58 &4419682404409208229
 CircleCollider2D:
   m_ObjectHideFlags: 0

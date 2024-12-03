@@ -27,7 +27,7 @@ public class rollAnimal : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        animalManager.Instance.registerShopManger(this);
     }
 
     // Update is called once per frame
@@ -183,10 +183,48 @@ public class rollAnimal : MonoBehaviour
             an.setNotDragable();
         rightUi.GetComponent<rightUiControl>().downInteract();
         rightUi.MoveTo(rightUiUpAnchorPos);
-        Debug.Log("为什么没动");
+        //Debug.Log("为什么没动");
         leftUi.MoveTo(leftUiLeftAnchorPos);
         Invoke("animalUp", 1.5f);
         animalManager.Instance.clearCheckForShow();
+        animalManager.Instance.isShop = false;
 
+    }
+
+    public void inShopStart_WhenTurnStart()
+    {
+
+        
+        for (int i = 0; i < 6; i++)
+        {
+            baseAnimalScript baseAn = animalManager.Instance.allAnimals[i];
+            if (baseAn != null)
+            {
+                baseAnimalScript currentBaseAn = baseAn;
+                int currentIndex = i;
+                //currentBaseAn.transform.position = animalManager.Instance.gameStartPos[currentIndex];
+
+                // 在委托中使用局部副本
+                currentBaseAn.MoveTo(animalManager.Instance.inShopSixPos[currentIndex], () =>
+                {
+                    //Debug.Log($"BaseAnimal {currentBaseAn.name} 已完成移动！");
+                    // 这里可以让 currentBaseAn 执行一些逻辑
+                    //currentBaseAn.setDragable();
+                    currentBaseAn.StartState(animalSceneState.inShop);
+                });
+            }
+
+
+
+        }
+        downUi.MoveTo(downUiDownAnchorPos,1);
+        //rightUi.GetComponent<RectTransform>().anchoredPosition = rightUiUpAnchorPos;
+        rightUi.GetComponent<rightUiControl>().downInteract();
+        rightUi.MoveTo(rightUiDownAnchorPos);
+        //leftUi.GetComponent<RectTransform>().anchoredPosition = leftUiLeftAnchorPos;
+        leftUi.MoveTo(leftUiRightAnchorPos);
+        //downUi.GetComponent<RectTransform>().anchoredPosition = downUiDownAnchorPos;
+
+        Invoke("rollAnimals", 0.3f);
     }
 }
