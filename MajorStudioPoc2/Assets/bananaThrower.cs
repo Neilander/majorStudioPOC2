@@ -16,6 +16,8 @@ public class bananaThrower : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!animalManager.Instance.isShow)
+            return;
         if (Input.GetMouseButtonDown(0))
         {
             if (curBanana <= 0)
@@ -39,5 +41,10 @@ public class bananaThrower : MonoBehaviour
         banana.ThrowObject(pos);
         curBanana -= 1;
         animalManager.Instance.curLeft.changeLeft(curBanana);
+    }
+
+    public void reportUiReach()
+    {
+        animalManager.Instance.reportReachShow_banana();
     }
 }

@@ -18,11 +18,19 @@ public class animalManager : MonoBehaviour
 
     public List<Vector3> gameStartPos;
     public List<Vector3> inShopSixPos;
-    public List<Vector3> shopPos;
+    public List<Vector3> inShowSixPos;
+    public List<Vector3> shopPos;//是指商店位置，通过注册的
+
+    public bool isShow;
+    public bool isShop;
 
 
     private scoreScript curDisplay;
     public bananaLeft curLeft;
+
+    public bool canStartShow = true;
+
+    private showStateMachine showManager;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -51,6 +59,7 @@ public class animalManager : MonoBehaviour
 
     public void turnStart()
     {
+        Debug.Log("回合开始了");
         foreach (baseAnimalScript an in allAnimals)
         {
             if (an != null)
@@ -183,6 +192,11 @@ public class animalManager : MonoBehaviour
         shopFather = basePos;
     }
 
+    public void registerShowManager(showStateMachine ma)
+    {
+        showManager = ma;
+    }
+
     /*
      * 关于移动交互的
      */
@@ -238,7 +252,7 @@ public class animalManager : MonoBehaviour
     public void handleMoveToPosAfterDrag(int n, baseAnimalScript caller)
     {
         int probN;
-
+        canStartShow = false;
         //移动要注意3个，位置，index，和coolText,最后该在存储里的位置
         if (detectMouseInCircle(out probN))
         {
@@ -264,7 +278,10 @@ public class animalManager : MonoBehaviour
             Debug.Log("回老位置");
             caller.MoveToForDrag((n < 6) ? inShopSixPos[n] : shopPos[n - 6]);
         }
+        Invoke("setCanStartShow", 1.5f);
     }
+
+    void setCanStartShow() { canStartShow = true; }
 
     private void OnDrawGizmos()
     {
@@ -287,5 +304,49 @@ public class animalManager : MonoBehaviour
                 Gizmos.DrawWireSphere(position, shopDetectionRadius); // 绘制圆
             }
         }
+    }
+
+
+    private List<baseAnimalScript> toCheckAnimals;
+    private bool ifBananaReach;
+    public void clearCheckForShow()
+    {
+        toCheckAnimals = new List<baseAnimalScript>();
+        ifBananaReach = false;
+        foreach (baseAnimalScript an in allAnimals)
+        {
+            if (an != null)
+                toCheckAnimals.Add(an);
+        }
+    }
+
+    public void reportReachShow_Animal(baseAnimalScript an)
+    {
+        if (toCheckAnimals.Contains(an))
+            toCheckAnimals.Remove(an);
+
+        if (ifBananaReach && (toCheckAnimals.Count == 0))
+            StartShow();
+            
+    }
+
+    public void reportReachShow_banana()
+    {
+        ifBananaReach = true;
+        if (ifBananaReach && (toCheckAnimals.Count == 0))
+            StartShow();
+    }
+
+
+
+    void StartShow()
+    {
+        isShow = true;
+        showManager.StartState(showState.showStart);
+    }
+
+    public void reportStartDrag()
+    {
+        canStartShow = false;
     }
 }

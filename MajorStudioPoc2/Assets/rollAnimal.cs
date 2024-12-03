@@ -8,6 +8,7 @@ public class rollAnimal : MonoBehaviour
     public animalPrefabsInfo infos;
     public moveUiControl rightUi;
     public moveUiControl leftUi;
+    public moveUiControl downUi;
 
     public Vector2 rightUiUpAnchorPos;
     public Vector2 rightUiDownAnchorPos;
@@ -15,9 +16,14 @@ public class rollAnimal : MonoBehaviour
     public Vector2 leftUiLeftAnchorPos;
     public Vector2 leftUiRightAnchorPos;
 
+    public Vector2 downUiDownAnchorPos;
+    public Vector2 downUiUpAnchorPos;
+
     public Transform rollBasePos;
     public float gap;
     public int rollTime;
+
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +37,11 @@ public class rollAnimal : MonoBehaviour
         {
             rollAnimals();
             inShopStart_whenGameStart();
+        }
+
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            inShopEnd_WhenTurnEnd();
         }
             
 
@@ -88,6 +99,46 @@ public class rollAnimal : MonoBehaviour
         }
     }
 
+    void animalLeave()
+    {
+        foreach (baseAnimalScript an in animalManager.Instance.shopAnimals)
+        {
+            if (an != null)
+            {
+                //an.setNotDragable();
+                an.leaveTo(an.transform.position + new Vector3(-20, 0, 0));
+            }
+        }
+    }
+
+    void animalUp()
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            baseAnimalScript baseAn = animalManager.Instance.allAnimals[i];
+            if (baseAn != null)
+            {
+                baseAnimalScript currentBaseAn = baseAn;
+                int currentIndex = i;
+                //currentBaseAn.transform.position = animalManager.Instance.gameStartPos[currentIndex];
+
+                // 在委托中使用局部副本
+                currentBaseAn.MoveTo(animalManager.Instance.inShowSixPos[currentIndex], () =>
+                {
+                    Debug.Log($"BaseAnimal {currentBaseAn.name} 已完成移动！");
+                    // 这里可以让 currentBaseAn 执行一些逻辑
+                    //currentBaseAn.setDragable();
+                    currentBaseAn.StartState(animalSceneState.inShow);
+                });
+            }
+
+
+
+        }
+
+        downUi.MoveTo(downUiUpAnchorPos);
+    }
+
     public void inShopStart_whenGameStart()
     {
         for (int i = 0; i < 6; i++)
@@ -118,6 +169,24 @@ public class rollAnimal : MonoBehaviour
         rightUi.MoveTo(rightUiDownAnchorPos);
         leftUi.GetComponent<RectTransform>().anchoredPosition = leftUiLeftAnchorPos;
         leftUi.MoveTo(leftUiRightAnchorPos);
+        downUi.GetComponent<RectTransform>().anchoredPosition = downUiDownAnchorPos;
         
+    }
+
+    public void inShopEnd_WhenTurnEnd()
+    {
+        if (!animalManager.Instance.canStartShow)
+            return;
+        animalLeave();
+
+        foreach (baseAnimalScript an in animalManager.Instance.allAnimals)
+            an.setNotDragable();
+        rightUi.GetComponent<rightUiControl>().downInteract();
+        rightUi.MoveTo(rightUiUpAnchorPos);
+        Debug.Log("为什么没动");
+        leftUi.MoveTo(leftUiLeftAnchorPos);
+        Invoke("animalUp", 1.5f);
+        animalManager.Instance.clearCheckForShow();
+
     }
 }

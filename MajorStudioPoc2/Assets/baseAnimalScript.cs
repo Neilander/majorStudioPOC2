@@ -33,9 +33,9 @@ public class baseAnimalScript : MonoBehaviour
     private int curState = 0;
     public TextMeshProUGUI text;
 
-
-    private animalSceneState Scene_curState;
-    private bool canBeDrag = false;
+    
+    public animalSceneState Scene_curState;
+    public bool canBeDrag = false;
 
     
     // Start is called before the first frame update
@@ -53,22 +53,7 @@ public class baseAnimalScript : MonoBehaviour
     void Update()
     {
         UpdateState();
-        /*
-        if (renderer != null)
-        {
-            // 获取鼠标在世界空间中的位置
-            Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            // 检查鼠标是否在 SpriteRenderer 的范围内
-            if (IsMouseOverSprite(mouseWorldPosition, renderer))
-            {
-                Debug.Log("hhhhhh");
-                explainText.Instance.doExplain(type, this);
-            }
-            else
-                explainText.Instance.undoExplain(type, this);
-        }*/
-
+        
         if (isMoving)
         {
             MoveTowardsTarget();
@@ -85,6 +70,8 @@ public class baseAnimalScript : MonoBehaviour
                 break;
 
             case animalSceneState.inShow:
+                canBeDrag = false;
+                animalManager.Instance.reportReachShow_Animal(this);
                 break;
         }
         Scene_curState = newState;
@@ -112,13 +99,18 @@ public class baseAnimalScript : MonoBehaviour
                 break;
 
             case animalSceneState.inShow:
+                //Debug.Log("什么情况？");
                 break;
         }
     }
 
     #region drag module
+    
     void HandleInShopState()
     {
+
+        if (Scene_curState == animalSceneState.inShow)
+            return;
         if (Input.GetMouseButtonDown(0)&& canBeDrag) // 鼠标左键按下
         {
             // 将鼠标屏幕坐标转换为世界坐标
@@ -139,7 +131,7 @@ public class baseAnimalScript : MonoBehaviour
 
         if (Input.GetMouseButton(0) && isDragging) // 鼠标左键按住且正在拖动
         {
-            OnMouseDrag();
+            OnMouseDragObj();
         }
 
         if (Input.GetMouseButtonUp(0)) // 鼠标左键松开
@@ -159,14 +151,16 @@ public class baseAnimalScript : MonoBehaviour
         dragOffset = transform.position - hitPoint; // 记录点击点与对象中心的偏移
         Debug.Log($"{gameObject.name}: Start dragging!");
         canBeDrag = false;
+        animalManager.Instance.reportStartDrag();
 
     }
 
-    void OnMouseDrag()
+    
+    void OnMouseDragObj()
     {
         // 获取鼠标屏幕坐标并转换为世界坐标
         Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
+        
         // 将 Z 坐标设置为 0（适用于 2D 平面）
         mouseWorldPosition.z = 0;
 
@@ -187,17 +181,23 @@ public class baseAnimalScript : MonoBehaviour
     }
 
     public void setDragable() { canBeDrag = true; }
+    public void setNotDragable() { canBeDrag = false; }
     #endregion
 
     #region moveModule
     [Header("moveModule")]
     public float moveDuration = 1.0f; // 移动所需时间
     public AnimationCurve moveCurve = AnimationCurve.EaseInOut(0, 0, 1, 1); // 自定义移动曲线
+
+    public float leaveDur = 1.5f;
+    public AnimationCurve leaveCurve;
+
     private bool isMoving = false; // 是否正在移动
     private Vector3 startPosition; // 起始位置
     private Vector3 targetPosition; // 目标位置
     private float elapsedTime = 0; // 累计时间
     private Action onMoveComplete; // 移动完成后的回调
+    private bool ifLeave = false;
 
     /// <summary>
     /// 开始平滑移动到指定位置
@@ -211,6 +211,7 @@ public class baseAnimalScript : MonoBehaviour
         onMoveComplete = onComplete; // 存储回调
         elapsedTime = 0; // 重置计时
         isMoving = true; // 开始移动
+        ifLeave = false;
     }
 
     public void MoveToForDrag(Vector2 destination)
@@ -220,6 +221,19 @@ public class baseAnimalScript : MonoBehaviour
         onMoveComplete = () => { canBeDrag = true; };
         elapsedTime = 0; // 重置计时
         isMoving = true; // 开始移动
+        ifLeave = false;
+    }
+
+    public void leaveTo(Vector2 destination)
+    {
+        startPosition = transform.position; // 记录起始位置
+        targetPosition = new Vector3(destination.x, destination.y, 0); // 转换目标位置为 Vector3
+        elapsedTime = 0; // 重置计时
+        isMoving = true; // 开始移动
+        ifLeave = true;
+        canBeDrag = false;
+        StartSway();
+        
     }
 
     /// <summary>
@@ -229,12 +243,13 @@ public class baseAnimalScript : MonoBehaviour
     {
         if (!isMoving) return;
 
+
         // 增加时间
         elapsedTime += Time.deltaTime;
-        float t = Mathf.Clamp01(elapsedTime / moveDuration); // 归一化时间 [0, 1]
+        float t = Mathf.Clamp01(elapsedTime / (ifLeave?leaveDur: moveDuration)); // 归一化时间 [0, 1]
 
         // 根据曲线计算插值
-        float curveValue = moveCurve.Evaluate(t);
+        float curveValue = ifLeave? leaveCurve.Evaluate(t):  moveCurve.Evaluate(t);
         transform.position = Vector3.Lerp(startPosition, targetPosition, curveValue);
 
         // 检测是否完成移动
@@ -247,6 +262,8 @@ public class baseAnimalScript : MonoBehaviour
             onMoveComplete?.Invoke();
         }
     }
+
+    
 
     #endregion
 
@@ -443,6 +460,55 @@ public class baseAnimalScript : MonoBehaviour
         // 确保缩放恢复原值
         transform.localScale = originalScale;
     }
+
+    #region swayModule
+
+    public float swayAngle = 15f; // 最大摆动角度
+    public float swaySpeed = 2f;  // 摇晃速度
+
+    private Coroutine swayCoroutine;
+
+    /// <summary>
+    /// 开始左右摇晃
+    /// </summary>
+    public void StartSway()
+    {
+        if (swayCoroutine == null)
+        {
+            swayCoroutine = StartCoroutine(Sway());
+        }
+    }
+
+    /// <summary>
+    /// 停止左右摇晃
+    /// </summary>
+    public void StopSway()
+    {
+        if (swayCoroutine != null)
+        {
+            StopCoroutine(swayCoroutine);
+            swayCoroutine = null;
+            transform.rotation = Quaternion.identity; // 恢复为初始角度
+        }
+    }
+
+    /// <summary>
+    /// 左右摇晃的协程
+    /// </summary>
+    private IEnumerator Sway()
+    {
+        float timer = 0f;
+
+        while (true)
+        {
+            timer += Time.deltaTime * swaySpeed;
+            float angle = Mathf.Sin(timer) * swayAngle; // 使用正弦函数计算当前角度
+            transform.rotation = Quaternion.Euler(0, 0, angle); // 应用摆动角度（Z 轴）
+            yield return null; // 等待下一帧
+        }
+    }
+
+    #endregion
 }
 
 

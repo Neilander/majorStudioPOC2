@@ -7,6 +7,7 @@ public class showStateMachine : MonoBehaviour
     private showState curState;
 
     public GameObject ballPrefab;
+    public float endTurnWaitTime = 1f;
 
     private ballScript curBall;
     private bool ifBallMoveFinish = false;
@@ -15,14 +16,14 @@ public class showStateMachine : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        animalManager.Instance.registerShowManager(this);
+        curState = showState.empty;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.D))
-            StartState(showState.showStart);
+        
         UpdateState();
     }
 
@@ -55,7 +56,7 @@ public class showStateMachine : MonoBehaviour
             case showState.turnEnd:
                 animalManager.Instance.turnEnd();
                 ifendTurnAnimationFinish = false;
-                Invoke("changeAnimationFinishState", 2f);
+                Invoke("changeAnimationFinishState", endTurnWaitTime);
                 break;
 
             default:
