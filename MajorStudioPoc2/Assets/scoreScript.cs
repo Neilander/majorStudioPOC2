@@ -27,7 +27,7 @@ public class scoreScript : MonoBehaviour
     {
         if (text != null)
         {
-            text.text = "Score: " + score; // 更新 Text 显示
+            text.text = score.ToString(); // 更新 Text 显示
         }
     }
 }

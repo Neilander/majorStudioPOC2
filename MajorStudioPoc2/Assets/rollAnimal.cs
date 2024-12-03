@@ -1,10 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class rollAnimal : MonoBehaviour
 {
     public animalPrefabsInfo infos;
+    public moveUiControl rightUi;
+    public moveUiControl leftUi;
+
+    public Vector2 rightUiUpAnchorPos;
+    public Vector2 rightUiDownAnchorPos;
+
+    public Vector2 leftUiLeftAnchorPos;
+    public Vector2 leftUiRightAnchorPos;
 
     public Transform rollBasePos;
     public float gap;
@@ -103,5 +112,12 @@ public class rollAnimal : MonoBehaviour
 
 
         }
+
+        rightUi.GetComponent<RectTransform>().anchoredPosition = rightUiUpAnchorPos;
+        rightUi.GetComponent<rightUiControl>().downInteract();
+        rightUi.MoveTo(rightUiDownAnchorPos);
+        leftUi.GetComponent<RectTransform>().anchoredPosition = leftUiLeftAnchorPos;
+        leftUi.MoveTo(leftUiRightAnchorPos);
+        
     }
 }
