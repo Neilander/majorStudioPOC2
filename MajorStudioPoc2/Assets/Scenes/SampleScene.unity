@@ -876,7 +876,7 @@ MonoBehaviour:
   downUiDownAnchorPos: {x: 0, y: -200}
   downUiUpAnchorPos: {x: 0, y: 150}
   rollBasePos: {fileID: 648416834}
-  gap: 2
+  gap: 2.5
   rollTime: 3
 --- !u!4 &305736732
 Transform:

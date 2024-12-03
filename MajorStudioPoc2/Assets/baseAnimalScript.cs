@@ -45,7 +45,7 @@ public class baseAnimalScript : MonoBehaviour
         animalManager.Instance.registerAnimal(selfIndex, this, out text);
         originalScale = transform.localScale; // 记录原始缩放
         curState = -1;
-        ChangeDisplay(0);
+        ChangeDisplay(0, true);
         //StartState(animalSceneState.inShop);
     }
 
@@ -111,7 +111,7 @@ public class baseAnimalScript : MonoBehaviour
         ifJustInteract = false;
         ifHaveBall = false;
         ifReady = true;
-        ChangeDisplay(0);
+        ChangeDisplay(0,false);
         ChangeRestCount(-1);
         Invoke("reportFlipFinish", 1f);
     }
@@ -317,7 +317,7 @@ public class baseAnimalScript : MonoBehaviour
         if (ifJustInteract)
         {
 
-            ChangeDisplay(2);
+            ChangeDisplay(2,false);
             ChangeRestCount(restTurn);
             ifJustInteract = false;
         }
@@ -362,7 +362,7 @@ public class baseAnimalScript : MonoBehaviour
     {
         ball.gameObject.SetActive(true);
         ball.MoveBall(selfIndex, selfIndex+baseIndexAdd);
-        ChangeDisplay(1);
+        ChangeDisplay(1,false);
         ifJustInteract = true;
         ifHaveBall = false;
         animalManager.Instance.changeScore(interactionScore);
@@ -382,7 +382,7 @@ public class baseAnimalScript : MonoBehaviour
 
     private void recover()
     {
-        ChangeDisplay(0);
+        ChangeDisplay(0,false);
         ChangeRestCount(-1);
         ifReady = true;
     }
@@ -421,7 +421,7 @@ public class baseAnimalScript : MonoBehaviour
     /// 0代表充能态，1代表动作态，2代表休息态
     /// </summary>
     /// <param name="toState"></param>
-    public virtual void ChangeDisplay(int toState)
+    public virtual void ChangeDisplay(int toState, bool ifDirect)
     {
 
 
@@ -431,7 +431,7 @@ public class baseAnimalScript : MonoBehaviour
         curState = toState;
         if (toState >= 0 && toState < displaySprites.Count)
         {
-            StartCoroutine(FlipSprite(toState));
+            StartCoroutine(FlipSprite(toState, ifDirect));
         }
         else
         {
@@ -444,20 +444,29 @@ public class baseAnimalScript : MonoBehaviour
             renderer.color = Color.white;
     }
 
-    private IEnumerator FlipSprite(int toState)
+    private IEnumerator FlipSprite(int toState, bool ifDirect)
     {
         float halfDuration = flipDuration / 2f; // 翻转一半的时间
         Vector3 scale = transform.localScale;
 
-        // 第一阶段：逐渐缩小到 0
-        float elapsedTime = 0f;
-        while (elapsedTime < halfDuration)
+        if (ifDirect)
         {
-            float t = elapsedTime / halfDuration;
-            transform.localScale = Vector3.Lerp(originalScale, new Vector3(0, originalScale.y, originalScale.z), t);
-            elapsedTime += Time.deltaTime;
-            yield return null;
+            // 确保缩放为 0
+            transform.localScale = new Vector3(0, originalScale.y, originalScale.z);
         }
+        else
+        {
+            // 第一阶段：逐渐缩小到 0
+            float elapsedTime = 0f;
+            while (elapsedTime < halfDuration)
+            {
+                float t = elapsedTime / halfDuration;
+                transform.localScale = Vector3.Lerp(originalScale, new Vector3(0, originalScale.y, originalScale.z), t);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+        }
+        
 
         // 确保缩放为 0
         transform.localScale = new Vector3(0, originalScale.y, originalScale.z);

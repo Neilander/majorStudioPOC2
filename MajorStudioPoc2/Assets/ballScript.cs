@@ -254,9 +254,7 @@ public class ballScript : MonoBehaviour
         }   
         else
         {
-            Debug.Log("球掉了");
-            ifDropped = true;
-            curMachine.reportDrop(this);
+            doDrop();
         }
         isMoving = false;
         if (callBack != null)

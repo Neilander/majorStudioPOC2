@@ -48,6 +48,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4844508696720384693, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8c1f3dee95dfe4039b9838663fa3b7c5, type: 3}
+    - target: {fileID: 5608903335060564723, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608903335060564723, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608903335060564723, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608903335060564723, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6923289616350837719, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
       propertyPath: type
       value: 1
@@ -63,18 +83,18 @@ PrefabInstance:
     - target: {fileID: 6923289616350837719, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
       propertyPath: displaySprites.Array.data[0]
       value: 
-      objectReference: {fileID: 21300000, guid: 27b1148ffe2d241d78157bb3c73a72d0, type: 3}
+      objectReference: {fileID: 21300000, guid: 8c1f3dee95dfe4039b9838663fa3b7c5, type: 3}
     - target: {fileID: 6923289616350837719, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
       propertyPath: displaySprites.Array.data[1]
       value: 
-      objectReference: {fileID: 21300000, guid: 5bb653e6be034418a9daecfc2d4726f3, type: 3}
+      objectReference: {fileID: 21300000, guid: 900184ec2a85c4b84a98d0258f9a83b4, type: 3}
     - target: {fileID: 6923289616350837719, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
       propertyPath: displaySprites.Array.data[2]
       value: 
-      objectReference: {fileID: 21300000, guid: c7b6bbc84a1b443e090a6da157bbdfe9, type: 3}
+      objectReference: {fileID: 21300000, guid: 59fc4b6fb65db481ea9fa884fd3fe939, type: 3}
     - target: {fileID: 8403506454095161910, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
       propertyPath: m_Name
-      value: basicAnimal (4) Variant
+      value: elephant
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
