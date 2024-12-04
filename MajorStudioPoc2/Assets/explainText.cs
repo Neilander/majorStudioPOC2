@@ -2,14 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class explainText : MonoBehaviour
 {
 
     public static explainText Instance { get; private set; }
     private explainType tp;
-    public TextMeshProUGUI text;
+    public TextMeshProUGUI nameText;
+    public TextMeshProUGUI expText;
+    //public Image display;
     public MonoBehaviour curReporter;
+
+    public RectTransform totalTrans;
+    public GameObject controlObj;
+
+    public List<string> names;
+    public List<string> explainTexts;
+    public List<GameObject> imgs;
+
+    private GameObject lastImg;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -41,17 +53,17 @@ public class explainText : MonoBehaviour
         if ((tp == type) && (reporter == curReporter))
             return;
 
-        switch (type)
-        {
-            case explainType.dog1:
-                text.text = "A common cute dog\n\npass the ball to the right,\ngain 50 score,\nand rest 2 turn";
-                break;
-
-            case explainType.dog2:
-                text.text = "A special dog\n\npass the ball to the left 2,\ngain 50 score,\nand rest 3 turn";
-                break;
-        }
-
+        nameText.text = names[(int)type];
+        expText.text = explainTexts[(int)type];
+        if (lastImg != null)
+            lastImg.SetActive(false);
+        imgs[(int)type].SetActive(true);
+        //display.GetComponent<RectTransform>().anchoredPosition = imgLocalAnchors[(int)type];
+        lastImg = imgs[(int)type];
+        Vector2 baseP = (Vector2)Camera.main.WorldToScreenPoint(reporter.transform.position) - new Vector2(960,540);
+        Debug.Log(baseP);
+        totalTrans.anchoredPosition = baseP+ (baseP.x<0 ?new Vector2(400,100):new Vector2(-400,100));
+        controlObj.SetActive(true);
         tp = type;
         curReporter = reporter;
     }
@@ -60,8 +72,11 @@ public class explainText : MonoBehaviour
     {
         if (reporter == curReporter)
         {
-            text.text = "Let them do the show\nand earn more score!";
+            //expText.text = "Let them do the show\nand earn more score!";
             curReporter = null;
+            controlObj.SetActive(false);
+            if (lastImg != null)
+                lastImg.SetActive(false);
         }
            
     }
@@ -69,7 +84,6 @@ public class explainText : MonoBehaviour
 
 public enum explainType
 {
-    dog1,
-    dog2,
-    banana
+    monkey,
+    elephant
 }

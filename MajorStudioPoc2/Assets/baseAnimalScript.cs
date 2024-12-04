@@ -37,6 +37,9 @@ public class baseAnimalScript : MonoBehaviour
     public animalSceneState Scene_curState;
     public bool canBeDrag = false;
 
+    private float ratioTimer = 1;
+    private Vector3 baseRatio;
+
     
     // Start is called before the first frame update
     void Start()
@@ -45,6 +48,7 @@ public class baseAnimalScript : MonoBehaviour
         animalManager.Instance.registerAnimal(selfIndex, this, out text);
         originalScale = transform.localScale; // 记录原始缩放
         curState = -1;
+        baseRatio = transform.localScale;
         ChangeDisplay(0, true);
         //StartState(animalSceneState.inShop);
     }
@@ -53,11 +57,19 @@ public class baseAnimalScript : MonoBehaviour
     void Update()
     {
         UpdateState();
+
         
+
         if (isMoving)
         {
             MoveTowardsTarget();
         }
+
+        float curR = Mathf.Clamp(transform.position.y, -4, 4)+4;
+
+        ratioTimer = (1- curR/8)*0.5f + 0.5f;
+
+        transform.localScale = baseRatio * ratioTimer;
     }
 
     public void StartState(animalSceneState newState)
@@ -67,6 +79,7 @@ public class baseAnimalScript : MonoBehaviour
         {
             case animalSceneState.inShop:
                 canBeDrag = true;
+
                 break;
 
             case animalSceneState.inShow:
@@ -82,6 +95,7 @@ public class baseAnimalScript : MonoBehaviour
         switch (lastState)
         {
             case animalSceneState.inShop:
+                explainText.Instance.undoExplain(type, this);
                 break;
 
             case animalSceneState.inShow:
@@ -96,11 +110,22 @@ public class baseAnimalScript : MonoBehaviour
         {
             case animalSceneState.inShop:
                 HandleInShopState();
-                
+                if (!isDragging)
+                {
+                    if (IsMouseOverSprite(Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)), renderer))
+                    {
+                        explainText.Instance.doExplain(type, this);
+                    }
+                    else
+                    {
+                        explainText.Instance.undoExplain(type, this);
+                    }
+                }
                 break;
 
             case animalSceneState.inShow:
                 //Debug.Log("什么情况？");
+                
                 break;
         }
     }
@@ -169,6 +194,7 @@ public class baseAnimalScript : MonoBehaviour
         Debug.Log($"{gameObject.name}: Start dragging!");
         canBeDrag = false;
         animalManager.Instance.reportStartDrag();
+        explainText.Instance.undoExplain(type,this);
 
     }
 
@@ -452,7 +478,7 @@ public class baseAnimalScript : MonoBehaviour
         if (ifDirect)
         {
             // 确保缩放为 0
-            transform.localScale = new Vector3(0, originalScale.y, originalScale.z);
+           baseRatio = new Vector3(0, originalScale.y, originalScale.z);
         }
         else
         {
@@ -461,7 +487,7 @@ public class baseAnimalScript : MonoBehaviour
             while (elapsedTime < halfDuration)
             {
                 float t = elapsedTime / halfDuration;
-                transform.localScale = Vector3.Lerp(originalScale, new Vector3(0, originalScale.y, originalScale.z), t);
+                baseRatio = Vector3.Lerp(originalScale, new Vector3(0, originalScale.y, originalScale.z), t);
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
@@ -469,7 +495,7 @@ public class baseAnimalScript : MonoBehaviour
         
 
         // 确保缩放为 0
-        transform.localScale = new Vector3(0, originalScale.y, originalScale.z);
+        baseRatio = new Vector3(0, originalScale.y, originalScale.z);
 
         // 更改 Sprite
         renderer.sprite = displaySprites[toState];
@@ -479,13 +505,13 @@ public class baseAnimalScript : MonoBehaviour
         while (elapsedTime < halfDuration)
         {
             float t = elapsedTime / halfDuration;
-            transform.localScale = Vector3.Lerp(new Vector3(0, originalScale.y, originalScale.z), originalScale, t);
+            baseRatio = Vector3.Lerp(new Vector3(0, originalScale.y, originalScale.z), originalScale, t);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
         // 确保缩放恢复原值
-        transform.localScale = originalScale;
+        baseRatio = originalScale;
     }
 
     #region swayModule
