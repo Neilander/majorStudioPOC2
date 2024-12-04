@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using TMPro;
 
 public class rollAnimal : MonoBehaviour
 {
@@ -23,26 +24,34 @@ public class rollAnimal : MonoBehaviour
     public float gap;
     public int rollTime;
 
-    
+    public int rollTimePerTurn = 5;
+    private int leftRollTime = 5;
+    public TextMeshProUGUI rollText;
+
+    public int maxTurn;
+    private int curTurn;
+    public TextMeshProUGUI turnText;
+
+
+    private bool ifGameStart = false;
+
     // Start is called before the first frame update
     void Start()
     {
         animalManager.Instance.registerShopManger(this);
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Y))
+        if (!ifGameStart)
         {
-            rollAnimals();
             inShopStart_whenGameStart();
+            ifGameStart = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            inShopEnd_WhenTurnEnd();
-        }
+        
             
 
         
@@ -50,6 +59,10 @@ public class rollAnimal : MonoBehaviour
 
     public void rollAnimals()
     {
+        if (leftRollTime < 1)
+            return;
+        leftRollTime -= 1;
+        rollText.text = "Roll (" + (rollTimePerTurn - leftRollTime).ToString() + "/"+rollTimePerTurn+")";
         // 存储所有计算的动物位置
         List<Vector3> calculatedPositions = new List<Vector3>();
 
@@ -97,6 +110,7 @@ public class rollAnimal : MonoBehaviour
             }
             n += 1;
         }
+
     }
 
     void animalLeave()
@@ -141,6 +155,10 @@ public class rollAnimal : MonoBehaviour
 
     public void inShopStart_whenGameStart()
     {
+        leftRollTime = rollTimePerTurn + 1;
+        curTurn = maxTurn;
+        turnText.text = curTurn.ToString();
+        rollAnimals();
         for (int i = 0; i < 6; i++)
         {
             baseAnimalScript baseAn = animalManager.Instance.allAnimals[i];
@@ -193,8 +211,11 @@ public class rollAnimal : MonoBehaviour
 
     public void inShopStart_WhenTurnStart()
     {
+        leftRollTime = rollTimePerTurn + 1;
+        curTurn -= 1;
+        turnText.text = curTurn.ToString();
 
-        
+
         for (int i = 0; i < 6; i++)
         {
             baseAnimalScript baseAn = animalManager.Instance.allAnimals[i];

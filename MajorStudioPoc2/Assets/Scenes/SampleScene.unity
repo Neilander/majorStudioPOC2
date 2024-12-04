@@ -878,6 +878,10 @@ MonoBehaviour:
   rollBasePos: {fileID: 648416834}
   gap: 2.5
   rollTime: 3
+  rollTimePerTurn: 5
+  rollText: {fileID: 2120697856}
+  maxTurn: 5
+  turnText: {fileID: 199242262}
 --- !u!4 &305736732
 Transform:
   m_ObjectHideFlags: 0
@@ -1004,7 +1008,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bananaPrefab: {fileID: 3907978297124924945, guid: 73d07ea05a31a4f6b9e79602abf39008, type: 3}
-  maxBanana: 20
+  maxBanana: 5
 --- !u!1 &349708598
 GameObject:
   m_ObjectHideFlags: 0
@@ -5203,8 +5207,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -5310,7 +5314,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1000
+  m_text: 2500
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5659,7 +5663,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Roll
+  m_text: Roll (0/5)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5686,8 +5690,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

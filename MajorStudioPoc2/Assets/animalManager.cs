@@ -32,6 +32,7 @@ public class animalManager : MonoBehaviour
 
     private showStateMachine showManager;
     private rollAnimal shopManager;
+    private bananaThrower thrower;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -203,6 +204,11 @@ public class animalManager : MonoBehaviour
         shopManager = roll;
     }
 
+    public void registerBananaThrower(bananaThrower rThrow)
+    {
+        thrower = rThrow;
+    }
+
     /*
      * 关于移动交互的
      */
@@ -355,6 +361,7 @@ public class animalManager : MonoBehaviour
     {
         isShop = true;
         shopManager.inShopStart_WhenTurnStart();
+        thrower.changeCount();
 
 
     }

@@ -11,6 +11,7 @@ public class bananaThrower : MonoBehaviour
     void Start()
     {
         curBanana = maxBanana;
+        animalManager.Instance.registerBananaThrower(this);
     }
 
     // Update is called once per frame
@@ -46,5 +47,17 @@ public class bananaThrower : MonoBehaviour
     public void reportUiReach()
     {
         animalManager.Instance.reportReachShow_banana();
+    }
+
+    public void changeCount(int n)
+    {
+        curBanana = n;
+        animalManager.Instance.curLeft.changeLeft(curBanana);
+    }
+
+    public void changeCount()
+    {
+        curBanana = maxBanana;
+        animalManager.Instance.curLeft.changeLeft(curBanana);
     }
 }
