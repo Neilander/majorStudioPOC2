@@ -62,7 +62,7 @@ public class explainText : MonoBehaviour
         lastImg = imgs[(int)type];
         Vector2 baseP = (Vector2)Camera.main.WorldToScreenPoint(reporter.transform.position) - new Vector2(960,540);
         Debug.Log(baseP);
-        totalTrans.anchoredPosition = baseP+ (baseP.x<0 ?new Vector2(400,100):new Vector2(-400,100));
+        totalTrans.anchoredPosition = baseP+ (baseP.x<0 ?new Vector2(400,150):new Vector2(-400,150));
         controlObj.SetActive(true);
         tp = type;
         curReporter = reporter;
@@ -85,5 +85,6 @@ public class explainText : MonoBehaviour
 public enum explainType
 {
     monkey,
-    elephant
+    elephant,
+    bear
 }

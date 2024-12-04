@@ -15,3 +15,4 @@ MonoBehaviour:
   animalPrefabs:
   - {fileID: 8403506454095161910, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
   - {fileID: 7687521748589806348, guid: 0bac4f7017f7243afb64bb237c27aca9, type: 3}
+  - {fileID: 7920422813030396926, guid: 091eb92fc0255416383742723aae65e4, type: 3}

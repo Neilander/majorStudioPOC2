@@ -28,6 +28,7 @@ public class baseAnimalScript : MonoBehaviour
     public Transform throwPos;
     public int interactionScore = 50;
     public explainType type;
+    public anActionExtention ext;
 
     //这是展示用的
     private int curState = 0;
@@ -85,6 +86,10 @@ public class baseAnimalScript : MonoBehaviour
             case animalSceneState.inShow:
                 canBeDrag = false;
                 animalManager.Instance.reportReachShow_Animal(this);
+                if (ext != null)
+                {
+                    ext.setUpWhenShow(this);
+                }
                 break;
         }
         Scene_curState = newState;
@@ -327,7 +332,15 @@ public class baseAnimalScript : MonoBehaviour
         //如果有球
         if (ifHaveBall)
         {
-            InterActWithBall();
+            if (ext != null)
+            {
+                ext.interactWithBall(this);
+            }
+            else
+            {
+                InterActWithBall();
+            }
+            
         }
         else if(!ifReady)
         {
