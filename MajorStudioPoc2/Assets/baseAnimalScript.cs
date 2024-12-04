@@ -360,7 +360,7 @@ public class baseAnimalScript : MonoBehaviour
             ChangeRestCount(restTurn);
             ifJustInteract = false;
         }
-        else if (curRestTurn <= 0)
+        else if (curRestTurn <= 1)
         {
             recover();
         }
@@ -429,7 +429,7 @@ public class baseAnimalScript : MonoBehaviour
     
 
     /// <summary>
-    /// 传入小于0的数字会让休息数字关闭
+    /// 传入小于1的数字会让休息数字关闭
     /// </summary>
     /// <param name="turn"></param>
     internal void ChangeRestCount(int turn)
@@ -441,7 +441,7 @@ public class baseAnimalScript : MonoBehaviour
             animalManager.Instance.registerAnimal(selfIndex, this, out text);
 
         
-        if (turn >= 0)
+        if (turn > 0)
         {
             text.text = curRestTurn.ToString();
             if (!text.gameObject.activeInHierarchy)

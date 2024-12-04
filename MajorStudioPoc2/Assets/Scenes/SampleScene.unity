@@ -1108,9 +1108,9 @@ MonoBehaviour:
   - Elephant
   - Bear
   explainTexts:
-  - Monkey will throw the ball to the right, earn 50 score, and rest 2 turn.
-  - Elephant will throw the ball to the left 2, earn 50 score, and rest 2 turn.
-  - Bear will throw the ball to right,earn 100 score, and rest 2 turn. Every time
+  - Monkey will throw the ball to the right, earn 50 score, and rest 3 turn.
+  - Elephant will throw the ball to the left 2, earn 50 score, and rest 3 turn.
+  - Bear will throw the ball to right,earn 100 score, and rest 3 turn. Every time
     he throws it further and earn extra 100 score.
   imgs:
   - {fileID: 1168410923}

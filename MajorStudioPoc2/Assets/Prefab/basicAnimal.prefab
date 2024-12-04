@@ -200,7 +200,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 15ace334e92954e8b985e919678582f7, type: 3}
   renderer: {fileID: 4844508696720384693}
   flipDuration: 0.5
-  restTurn: 2
+  restTurn: 3
   selfIndex: 0
   baseIndexAdd: 1
   throwTime: 2
@@ -209,6 +209,7 @@ MonoBehaviour:
   throwPos: {fileID: 5130801088020734540}
   interactionScore: 50
   type: 0
+  ext: {fileID: 0}
   text: {fileID: 0}
   Scene_curState: 0
   canBeDrag: 0
