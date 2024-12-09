@@ -1008,6 +1008,10 @@ MonoBehaviour:
   dialogues:
   - My master, the show is going to start!
   - I am Crazy Monkey, and I am here to help you out
+  allButtonsToChangeAble:
+  - {fileID: 1405951137}
+  - {fileID: 173065872}
+  tutorialPanel: {fileID: 874996592}
 --- !u!4 &305736732
 Transform:
   m_ObjectHideFlags: 0

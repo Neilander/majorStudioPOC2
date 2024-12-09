@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
+using UnityEngine.UI;
 
 public class rollAnimal : MonoBehaviour
 {
@@ -42,12 +43,15 @@ public class rollAnimal : MonoBehaviour
     public GameObject dialoguePanel;
     public TextMeshProUGUI dialogueText;
     public List<string> dialogues;
+    public List<Button> allButtonsToChangeAble;
     private int curIndex = 0;
+    public GameObject tutorialPanel;
 
     private bool ifGameStart = false;
     private bool dialogueStart = false;
 
     private bool firstRoll = false;
+   
 
     // Start is called before the first frame update
     void Start()
@@ -67,13 +71,22 @@ public class rollAnimal : MonoBehaviour
 
         if (animalManager.Instance.inTutorial&& dialogueStart)
         {
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButtonDown(0))
             {
                 //Debug.Log("来");
                 if ((curIndex + 1) < dialogues.Count)
                 {
                     curIndex += 1;
                     dialogueText.text = dialogues[curIndex];
+                }
+                else
+                {
+                    animalManager.Instance.inTutorial = false;
+                    tutorialPanel.SetActive(false);
+                    foreach (Button btn in allButtonsToChangeAble)
+                    {
+                        btn.interactable = true;
+                    }
                 }
             }
         }
@@ -179,7 +192,8 @@ public class rollAnimal : MonoBehaviour
 
         }
 
-        downUi.MoveTo(downUiUpAnchorPos);
+        if(animalManager.Instance.BananaEnable)
+            downUi.MoveTo(downUiUpAnchorPos);
     }
 
     public void inShopStart_whenGameStart()
@@ -216,7 +230,7 @@ public class rollAnimal : MonoBehaviour
         rightUi.GetComponent<rightUiControl>().downInteract();
         rightUi.MoveTo(rightUiDownAnchorPos);
         leftUi.GetComponent<RectTransform>().anchoredPosition = leftUiLeftAnchorPos;
-        leftUi.MoveTo(leftUiRightAnchorPos);
+        //leftUi.MoveTo(leftUiRightAnchorPos);
         downUi.GetComponent<RectTransform>().anchoredPosition = downUiDownAnchorPos;
         
     }
@@ -234,7 +248,8 @@ public class rollAnimal : MonoBehaviour
         rightUi.GetComponent<rightUiControl>().downInteract();
         rightUi.MoveTo(rightUiUpAnchorPos);
         //Debug.Log("为什么没动");
-        leftUi.MoveTo(leftUiLeftAnchorPos);
+        if(animalManager.Instance.BananaEnable)
+            leftUi.MoveTo(leftUiLeftAnchorPos);
         Invoke("animalUp", 1.5f);
         animalManager.Instance.clearCheckForShow();
         animalManager.Instance.isShop = false;
@@ -275,7 +290,8 @@ public class rollAnimal : MonoBehaviour
         rightUi.GetComponent<rightUiControl>().downInteract();
         rightUi.MoveTo(rightUiDownAnchorPos);
         //leftUi.GetComponent<RectTransform>().anchoredPosition = leftUiLeftAnchorPos;
-        leftUi.MoveTo(leftUiRightAnchorPos);
+        if(animalManager.Instance.BananaEnable)
+            leftUi.MoveTo(leftUiRightAnchorPos);
         //downUi.GetComponent<RectTransform>().anchoredPosition = downUiDownAnchorPos;
 
         Invoke("rollAnimals", 0.3f);

@@ -31,6 +31,7 @@ public class animalManager : MonoBehaviour
     public bool canStartShow = true;
 
     public bool inTutorial = true;
+    public bool BananaEnable = false;
 
     private showStateMachine showManager;
     private rollAnimal shopManager;
@@ -326,7 +327,8 @@ public class animalManager : MonoBehaviour
     public void clearCheckForShow()
     {
         toCheckAnimals = new List<baseAnimalScript>();
-        ifBananaReach = false;
+        ifBananaReach = !BananaEnable;
+        
         foreach (baseAnimalScript an in allAnimals)
         {
             if (an != null)

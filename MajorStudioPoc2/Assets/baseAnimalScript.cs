@@ -15,6 +15,7 @@ public class baseAnimalScript : MonoBehaviour
     internal int curRestTurn;
     internal ballScript ball;
     private Vector3 originalScale;
+    public Vector2 explainRange;
 
 
     
@@ -119,7 +120,7 @@ public class baseAnimalScript : MonoBehaviour
                     HandleInShopState();
                     if (!isDragging)
                     {
-                        if (IsMouseOverSprite(Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)), renderer))
+                        if (IsMouseWithinRange(Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)), transform,explainRange))
                         {
                             explainText.Instance.doExplain(type, this);
                         }
@@ -314,20 +315,23 @@ public class baseAnimalScript : MonoBehaviour
         }
     }
 
-    
+
 
     #endregion
 
-    private bool IsMouseOverSprite(Vector3 mousePosition, SpriteRenderer spriteRenderer)
+    private bool IsMouseWithinRange(Vector3 mousePosition, Transform targetTransform, Vector2 range)
     {
-        // 获取 Sprite 的边界
-        Bounds bounds = spriteRenderer.bounds;
+        // 获取目标 Transform 的位置
+        Vector3 targetPosition = targetTransform.position;
 
-        // 仅检查 2D 平面上的位置（忽略 Z 轴）
-        return bounds.Contains(new Vector3(mousePosition.x, mousePosition.y, bounds.center.z));
+        // 计算鼠标与目标位置之间的差距
+        Vector3 offset = mousePosition - targetPosition;
+
+        // 检查差距是否在指定范围内
+        return Mathf.Abs(offset.x) <= range.x && Mathf.Abs(offset.y) <= range.y;
     }
 
-    
+
 
     public void DoTurnStart()
     {
