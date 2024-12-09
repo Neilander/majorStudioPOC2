@@ -114,16 +114,19 @@ public class baseAnimalScript : MonoBehaviour
         switch (Scene_curState)
         {
             case animalSceneState.inShop:
-                HandleInShopState();
-                if (!isDragging)
+                if (!animalManager.Instance.inTutorial)
                 {
-                    if (IsMouseOverSprite(Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)), renderer))
+                    HandleInShopState();
+                    if (!isDragging)
                     {
-                        explainText.Instance.doExplain(type, this);
-                    }
-                    else
-                    {
-                        explainText.Instance.undoExplain(type, this);
+                        if (IsMouseOverSprite(Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)), renderer))
+                        {
+                            explainText.Instance.doExplain(type, this);
+                        }
+                        else
+                        {
+                            explainText.Instance.undoExplain(type, this);
+                        }
                     }
                 }
                 break;

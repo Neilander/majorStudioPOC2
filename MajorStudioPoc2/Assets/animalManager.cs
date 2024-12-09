@@ -30,6 +30,8 @@ public class animalManager : MonoBehaviour
 
     public bool canStartShow = true;
 
+    public bool inTutorial = true;
+
     private showStateMachine showManager;
     private rollAnimal shopManager;
     private bananaThrower thrower;

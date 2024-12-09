@@ -32,8 +32,22 @@ public class rollAnimal : MonoBehaviour
     private int curTurn;
     public TextMeshProUGUI turnText;
 
+    [Header("教程相关")]
+    public Vector2 MonkeyStartPos;
+    public Vector2 MonkeyEndPos;
+    public moveUiControl monkeyUi;
+    public float maxAngle = 30f; // 最大旋转角度
+    public float duration = 1f; // 整个动画的时长
+    public Vector2 pivotOffset = new Vector2(50, 50);
+    public GameObject dialoguePanel;
+    public TextMeshProUGUI dialogueText;
+    public List<string> dialogues;
+    private int curIndex = 0;
 
     private bool ifGameStart = false;
+    private bool dialogueStart = false;
+
+    private bool firstRoll = false;
 
     // Start is called before the first frame update
     void Start()
@@ -51,7 +65,18 @@ public class rollAnimal : MonoBehaviour
             ifGameStart = true;
         }
 
-        
+        if (animalManager.Instance.inTutorial&& dialogueStart)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                //Debug.Log("来");
+                if ((curIndex + 1) < dialogues.Count)
+                {
+                    curIndex += 1;
+                    dialogueText.text = dialogues[curIndex];
+                }
+            }
+        }
             
 
         
@@ -59,8 +84,12 @@ public class rollAnimal : MonoBehaviour
 
     public void rollAnimals()
     {
+        if (animalManager.Instance.inTutorial&& firstRoll)
+            return;
         if (leftRollTime < 1)
             return;
+
+        firstRoll = true;
         leftRollTime -= 1;
         rollText.text = "Roll (" + (rollTimePerTurn - leftRollTime).ToString() + "/"+rollTimePerTurn+")";
         // 存储所有计算的动物位置
@@ -155,6 +184,7 @@ public class rollAnimal : MonoBehaviour
 
     public void inShopStart_whenGameStart()
     {
+        startExplain();
         leftRollTime = rollTimePerTurn + 1;
         curTurn = maxTurn;
         turnText.text = curTurn.ToString();
@@ -193,6 +223,8 @@ public class rollAnimal : MonoBehaviour
 
     public void inShopEnd_WhenTurnEnd()
     {
+        if (animalManager.Instance.inTutorial)
+            return;
         if (!animalManager.Instance.canStartShow)
             return;
         animalLeave();
@@ -247,5 +279,79 @@ public class rollAnimal : MonoBehaviour
         //downUi.GetComponent<RectTransform>().anchoredPosition = downUiDownAnchorPos;
 
         Invoke("rollAnimals", 0.3f);
+    }
+
+    void startExplain()
+    {
+        monkeyUi.GetComponent<RectTransform>().anchoredPosition = MonkeyStartPos;
+        monkeyUi.MoveTo(MonkeyEndPos);
+    }
+
+    public void startExplainStageTwo()
+    {
+        StartCoroutine(RotateAroundPoint());
+    }
+
+    private IEnumerator RotateAroundPoint()
+    {
+        RectTransform rectTransform = monkeyUi.GetComponent<RectTransform>();
+        Vector2 originalAnchoredPosition = rectTransform.anchoredPosition;
+
+        // 计算旋转的中心点（相对于 RectTransform 的位置）
+        Vector2 rotationCenter = originalAnchoredPosition + pivotOffset;
+
+        // 向右旋转：快到慢
+        float elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / duration;
+            float currentAngle = Mathf.Lerp(0, maxAngle, Mathf.Sin(t * Mathf.PI * 0.5f)); // 快到慢
+
+            // 计算绕旋转中心点旋转后的位置
+            rectTransform.anchoredPosition = RotatePoint(originalAnchoredPosition, rotationCenter, currentAngle);
+            rectTransform.rotation = Quaternion.Euler(0, 0, currentAngle);
+
+            yield return null;
+        }
+
+        // 回转：慢到快
+        elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / duration;
+            float currentAngle = Mathf.Lerp(maxAngle, 0, 1 - Mathf.Cos(t * Mathf.PI * 0.5f)); // 慢到快
+
+            // 计算绕旋转中心点旋转后的位置
+            rectTransform.anchoredPosition = RotatePoint(originalAnchoredPosition, rotationCenter, currentAngle);
+            rectTransform.rotation = Quaternion.Euler(0, 0, currentAngle);
+
+            yield return null;
+        }
+
+        // 确保回到初始位置和角度
+        rectTransform.anchoredPosition = originalAnchoredPosition;
+        rectTransform.rotation = Quaternion.Euler(0, 0, 0);
+
+        dialoguePanel.SetActive(true);
+        dialogueText.text = dialogues[0];
+        dialogueStart = true;
+    }
+
+    // 计算点绕另一个点旋转后的新位置
+    private Vector2 RotatePoint(Vector2 point, Vector2 pivot, float angle)
+    {
+        float radian = angle * Mathf.Deg2Rad;
+        float cos = Mathf.Cos(radian);
+        float sin = Mathf.Sin(radian);
+
+        Vector2 direction = point - pivot;
+        Vector2 rotatedDirection = new Vector2(
+            cos * direction.x - sin * direction.y,
+            sin * direction.x + cos * direction.y
+        );
+
+        return pivot + rotatedDirection;
     }
 }
