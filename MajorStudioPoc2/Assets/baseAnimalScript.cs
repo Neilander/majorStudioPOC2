@@ -658,6 +658,10 @@ public class baseAnimalScript : MonoBehaviour
     }
     #endregion
 
+    public int getRestTurn()
+    {
+        return curRestTurn;
+    }
     
 }
 

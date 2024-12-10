@@ -116,5 +116,6 @@ public enum explainType
 {
     monkey,
     elephant,
-    bear
+    bear,
+    tiger
 }

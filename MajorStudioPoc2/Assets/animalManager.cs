@@ -425,4 +425,33 @@ public class animalManager : MonoBehaviour
         if (toCheckAnimalsShowEndFlip.Count == 0)
             StartShop();
     }
+
+    public int returnTheIndexWithTheMostRestTurn(int curIndex)
+    {
+        List<int> potential = new List<int>();
+        int max = -2;
+        foreach (baseAnimalScript an in allAnimals)
+        {
+            if (an.selfIndex != curIndex)
+            {
+                if (an.getRestTurn() > max)
+                {
+                    max = an.getRestTurn();
+                    potential = new List<int>();
+                    potential.Add(an.selfIndex);
+                }
+                else if (an.getRestTurn() == max)
+                {
+                    potential.Add(an.selfIndex);
+                }
+            }
+            else
+            {
+                Debug.Log("skip");
+            }
+                
+            
+        }
+        return potential[Random.Range(0, potential.Count)];
+    }
 }
