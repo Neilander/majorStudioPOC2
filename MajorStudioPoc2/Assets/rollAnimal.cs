@@ -43,15 +43,37 @@ public class rollAnimal : MonoBehaviour
     public GameObject dialoguePanel;
     public TextMeshProUGUI dialogueText;
     public List<string> dialogues;
+    public int firstStageIndex;
     public List<Button> allButtonsToChangeAble;
     private int curIndex = 0;
     public GameObject tutorialPanel;
+    public Sprite indexTwoBgImage;
+    public Vector2 indexTwoMonkeyPos;
+    public Vector2 indexTwoDialoguePos;
+    public Quaternion indexTwoRotation;
+    public Sprite indexThreeBgImage;
+    public Vector2 indexThreeMonkeyPos;
+    public Vector2 indexThreeDialoguePos;
+    public Quaternion indexThreeRotation;
+
+    public Sprite indexFourBgImage;
+    public Vector2 indexFourMonkeyPos;
+    public Vector2 indexFourDialoguePos;
+
+    public Sprite indexFiveBgImage;
+    public Vector2 indexFiveMonkeyPos;
+    public Vector2 indexFiveDialoguePos;
+
+    public Vector2 startDialoguePos;
+
+    public Image introBg;
+    public Sprite allblack;
 
     private bool ifGameStart = false;
     private bool dialogueStart = false;
 
     private bool firstRoll = false;
-   
+    private bool bananaIntroEd = false;
 
     // Start is called before the first frame update
     void Start()
@@ -74,10 +96,54 @@ public class rollAnimal : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 //Debug.Log("来");
-                if ((curIndex + 1) < dialogues.Count)
+                if (curIndex < firstStageIndex)
                 {
                     curIndex += 1;
                     dialogueText.text = dialogues[curIndex];
+                    if (curIndex == 2)
+                    {
+                        monkeyUi.GetComponent<RectTransform>().anchoredPosition = indexTwoMonkeyPos;
+                        monkeyUi.GetComponent<RectTransform>().rotation = indexTwoRotation;
+                        dialoguePanel.GetComponent<RectTransform>().anchoredPosition = indexTwoDialoguePos;
+                        introBg.sprite = indexTwoBgImage;
+                    }
+                    else if (curIndex == 3)
+                    {
+                        monkeyUi.GetComponent<RectTransform>().anchoredPosition = indexThreeMonkeyPos;
+                        monkeyUi.GetComponent<RectTransform>().rotation = indexThreeRotation;
+                        dialoguePanel.GetComponent<RectTransform>().anchoredPosition = indexThreeDialoguePos;
+                        introBg.sprite = indexThreeBgImage;
+                    }
+                    else if (curIndex == 4)
+                    {
+                        monkeyUi.GetComponent<RectTransform>().anchoredPosition = indexFourMonkeyPos;
+                        dialoguePanel.GetComponent<RectTransform>().anchoredPosition = indexFourDialoguePos;
+                        introBg.sprite = indexFourBgImage;
+                    }
+                    else if (curIndex == 5)
+                    {
+                        monkeyUi.GetComponent<RectTransform>().anchoredPosition = indexFiveMonkeyPos;
+                        dialoguePanel.GetComponent<RectTransform>().anchoredPosition = indexFiveDialoguePos;
+                        introBg.sprite = indexFiveBgImage;
+                    }
+
+                }
+                else if ((curIndex + 1) < dialogues.Count)
+                {
+                    if (!bananaIntroEd)
+                    {
+                        animalManager.Instance.inTutorial = false;
+                        tutorialPanel.SetActive(false);
+                        foreach (Button btn in allButtonsToChangeAble)
+                        {
+                            btn.interactable = true;
+                        }
+                    }
+                    else
+                    {
+                        curIndex += 1;
+                        dialogueText.text = dialogues[curIndex];
+                    }
                 }
                 else
                 {
@@ -262,6 +328,23 @@ public class rollAnimal : MonoBehaviour
         curTurn -= 1;
         turnText.text = curTurn.ToString();
 
+        if (!bananaIntroEd)
+        {
+            bananaIntroEd = true;
+            animalManager.Instance.BananaEnable = true;
+            animalManager.Instance.inTutorial = true;
+            tutorialPanel.SetActive(true);
+            foreach (Button btn in allButtonsToChangeAble)
+            {
+                btn.interactable = false;
+            }
+            startExplain();
+            curIndex += 1;
+            introBg.sprite = allblack;
+            firstRoll = false;
+        }
+        
+
 
         for (int i = 0; i < 6; i++)
         {
@@ -300,6 +383,8 @@ public class rollAnimal : MonoBehaviour
     void startExplain()
     {
         monkeyUi.GetComponent<RectTransform>().anchoredPosition = MonkeyStartPos;
+        dialoguePanel.GetComponent<RectTransform>().anchoredPosition = startDialoguePos;
+        dialoguePanel.SetActive(false);
         monkeyUi.MoveTo(MonkeyEndPos);
     }
 
@@ -351,7 +436,7 @@ public class rollAnimal : MonoBehaviour
         rectTransform.rotation = Quaternion.Euler(0, 0, 0);
 
         dialoguePanel.SetActive(true);
-        dialogueText.text = dialogues[0];
+        dialogueText.text = dialogues[curIndex];
         dialogueStart = true;
     }
 

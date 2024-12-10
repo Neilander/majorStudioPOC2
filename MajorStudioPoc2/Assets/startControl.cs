@@ -37,24 +37,27 @@ public class startControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            if ((curIndex + 1) < spriteList.Count)
-            {
-                curIndex += 1;
-                TriggerChange(curIndex);
-            }
-            else
-            {
-                LoadSceneByIndex(loadIndex);
-            }
-            
-        }
+        
 
         if (testBtn)
         {
             testBtn = false;
             TriggerChange(toIndex);
+        }
+    }
+
+    public void doNext()
+    {
+        if (fadeCoroutine != null)
+            return;
+        if ((curIndex + 1) < spriteList.Count)
+        {
+            curIndex += 1;
+            TriggerChange(curIndex);
+        }
+        else
+        {
+            LoadSceneByIndex(loadIndex);
         }
     }
 

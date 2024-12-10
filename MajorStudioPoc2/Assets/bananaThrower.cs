@@ -19,7 +19,7 @@ public class bananaThrower : MonoBehaviour
     {
         if (!animalManager.Instance.isShow)
             return;
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0)&& animalManager.Instance.BananaEnable)
         {
             if (curBanana <= 0)
                 return;
