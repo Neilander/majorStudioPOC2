@@ -9,7 +9,7 @@ public class textGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        animalManager.Instance.registerCanvas(gameObject);
     }
 
     // Update is called once per frame

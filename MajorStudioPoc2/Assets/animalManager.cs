@@ -15,6 +15,9 @@ public class animalManager : MonoBehaviour
     public List<Transform> basePos;
     public bool ifShowEnd = false;
     public List<TextMeshProUGUI> texts;
+    public GameObject scoreTextUiPrefab;
+    public Vector2 posFromCoolText;
+    public GameObject scoreCanvas;
 
     public List<Vector3> gameStartPos;
     public List<Vector3> inShopSixPos;
@@ -64,6 +67,13 @@ public class animalManager : MonoBehaviour
             inTutorial = true;
         }
             
+    }
+
+    void doScoreAddShow(int i, int score)
+    {
+        GameObject gmo = Instantiate(scoreTextUiPrefab, scoreCanvas.GetComponent<RectTransform>());
+        gmo.GetComponent<RectTransform>().anchoredPosition = texts[i].rectTransform.anchoredPosition + posFromCoolText;
+        gmo.GetComponent<scoreTextControl>().startScore("+"+score.ToString());
     }
 
     public void turnStart()
@@ -166,9 +176,10 @@ public class animalManager : MonoBehaviour
         curDisplay = score;
     }
 
-    public void changeScore(int n)
+    public void changeScore(int n, int index)
     {
         curDisplay.ChangeScore(n);
+        doScoreAddShow(index, n);
     }
 
     public void reportText(TextMeshProUGUI t, int n)
@@ -214,6 +225,11 @@ public class animalManager : MonoBehaviour
     public void registerBananaThrower(bananaThrower rThrow)
     {
         thrower = rThrow;
+    }
+
+    public void registerCanvas(GameObject gmo)
+    {
+        scoreCanvas = gmo;
     }
 
     /*

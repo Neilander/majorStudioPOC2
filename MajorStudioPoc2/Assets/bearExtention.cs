@@ -14,7 +14,7 @@ public class bearExtention : anActionExtention
         father.ChangeDisplay(1, false);
         father.ifJustInteract = true;
         father.ifHaveBall = false;
-        animalManager.Instance.changeScore(force*oneTimeScore);
+        animalManager.Instance.changeScore(force*oneTimeScore, father.selfIndex);
         father.ifReady = false;
         force += 1;
     }

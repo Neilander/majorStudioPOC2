@@ -394,7 +394,7 @@ public class baseAnimalScript : MonoBehaviour
         if (animalManager.Instance.ifShowEnd)
             return;
         curRestTurn = Mathf.Max(curRestTurn - n, 0);
-        if (curRestTurn == 0)
+        if (curRestTurn < 1)
         {
             recover();
         }
@@ -411,15 +411,24 @@ public class baseAnimalScript : MonoBehaviour
         ChangeDisplay(1,false);
         ifJustInteract = true;
         ifHaveBall = false;
-        animalManager.Instance.changeScore(interactionScore);
+        animalManager.Instance.changeScore(interactionScore,selfIndex);
         ifReady = false;
     }
 
     public virtual void DoRest()
     {
         curRestTurn = Mathf.Max(curRestTurn - 1, 0);
-        ChangeRestCount(curRestTurn);
+        if (curRestTurn < 1)
+        {
+            recover();
+        }
+        else
+        {
+            ChangeRestCount(curRestTurn);
+        }
     }
+
+
 
     public virtual void DoDrop()
     {

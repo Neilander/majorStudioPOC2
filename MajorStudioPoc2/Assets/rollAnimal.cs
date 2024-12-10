@@ -78,6 +78,7 @@ public class rollAnimal : MonoBehaviour
 
     private bool firstRoll = false;
     private bool bananaIntroEd = false;
+    private bool canClick = false;
 
     // Start is called before the first frame update
     void Start()
@@ -95,7 +96,7 @@ public class rollAnimal : MonoBehaviour
             ifGameStart = true;
         }
 
-        if (animalManager.Instance.inTutorial&& dialogueStart)
+        if (animalManager.Instance.inTutorial&& dialogueStart && canClick)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -397,6 +398,7 @@ public class rollAnimal : MonoBehaviour
         dialoguePanel.GetComponent<RectTransform>().anchoredPosition = startDialoguePos;
         dialoguePanel.SetActive(false);
         monkeyUi.MoveTo(MonkeyEndPos);
+        canClick = false;
     }
 
     public void startExplainStageTwo()
@@ -449,6 +451,7 @@ public class rollAnimal : MonoBehaviour
         dialoguePanel.SetActive(true);
         dialogueText.text = dialogues[curIndex];
         dialogueStart = true;
+        canClick = true;
     }
 
     // 计算点绕另一个点旋转后的新位置
