@@ -11,6 +11,10 @@ public class explainText : MonoBehaviour
     private explainType tp;
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI expText;
+    public TextMeshProUGUI goldText;
+    public TextMeshProUGUI restText;
+    public TextMeshProUGUI forceText;
+    public Image backImg;
     //public Image display;
     public MonoBehaviour curReporter;
 
@@ -19,6 +23,12 @@ public class explainText : MonoBehaviour
 
     public List<string> names;
     public List<string> explainTexts;
+    public List<string> scores;
+    public List<string> restTurns;
+    public List<string> forces;
+    public List<Sprite> bgs;
+    
+
     public List<GameObject> imgs;
 
     private GameObject lastImg;
@@ -53,13 +63,33 @@ public class explainText : MonoBehaviour
         if ((tp == type) && (reporter == curReporter))
             return;
 
-        nameText.text = names[(int)type];
-        expText.text = explainTexts[(int)type];
-        if (lastImg != null)
-            lastImg.SetActive(false);
-        imgs[(int)type].SetActive(true);
-        //display.GetComponent<RectTransform>().anchoredPosition = imgLocalAnchors[(int)type];
-        lastImg = imgs[(int)type];
+        if (type == explainType.elephant)
+        {
+            //nameText.text = "";
+            expText.text = "";
+            goldText.text = "";
+            restText.text = "";
+            forceText.text = "";
+            backImg.sprite = bgs[(int)type];
+        }
+        else
+        {
+            //nameText.text = names[(int)type];
+            expText.text = explainTexts[(int)type];
+            goldText.text = scores[(int)type];
+            restText.text = restTurns[(int)type];
+            forceText.text = forces[(int)type];
+            backImg.sprite = bgs[(int)type];
+            /*
+            if (lastImg != null)
+                lastImg.SetActive(false);
+            imgs[(int)type].SetActive(true);
+            //display.GetComponent<RectTransform>().anchoredPosition = imgLocalAnchors[(int)type];
+            lastImg = imgs[(int)type];*/
+            
+        }
+
+        
         Vector2 baseP = (Vector2)Camera.main.WorldToScreenPoint(reporter.transform.position) - new Vector2(960,540);
         Debug.Log(baseP);
         totalTrans.anchoredPosition = baseP+ (baseP.x<0 ?new Vector2(400,150):new Vector2(-400,150));

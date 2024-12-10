@@ -14,9 +14,10 @@ public class startControl : MonoBehaviour
     public TextMeshProUGUI displayText;
 
     public float fadeSpeed = 1.0f;
+    public GameObject frontCanvas;
 
     private Coroutine fadeCoroutine;
-    private int curIndex = 0;
+    private int curIndex = -1;
     public int loadIndex;
 
     [Header("测试用")]
@@ -26,12 +27,13 @@ public class startControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        /*
         if (spriteList.Count > 0 && stringList.Count > 0)
         {
             // Set initial values
             displayImage.sprite = spriteList[0];
             displayText.text = stringList[0];
-        }
+        }*/
     }
 
     // Update is called once per frame
@@ -50,6 +52,15 @@ public class startControl : MonoBehaviour
     {
         if (fadeCoroutine != null)
             return;
+
+        if (curIndex == -1)
+        {
+            displayText.text = "";
+            gameObject.SetActive(true);
+            frontCanvas.SetActive(false);
+
+        }
+
         if ((curIndex + 1) < spriteList.Count)
         {
             curIndex += 1;
@@ -76,19 +87,19 @@ public class startControl : MonoBehaviour
         }
 
         // Start the fade transition
-        fadeCoroutine = StartCoroutine(FadeTransition(index));
+        fadeCoroutine = StartCoroutine(FadeTransition(index, (index ==0) ||( index ==3)));
     }
 
-    private IEnumerator FadeTransition(int targetIndex)
+    private IEnumerator FadeTransition(int targetIndex, bool ifSpecial)
     {
         // Gradually decrease opacity to 0
         for (float alpha = 1.0f; alpha >= 0.0f; alpha -= Time.deltaTime * fadeSpeed)
         {
-            SetUIAlpha(alpha);
+            SetUIAlpha(alpha, ifSpecial);
             yield return null;
         }
 
-        SetUIAlpha(0);
+        SetUIAlpha(0,ifSpecial);
 
         // Update content
         displayImage.sprite = spriteList[targetIndex];
@@ -97,24 +108,28 @@ public class startControl : MonoBehaviour
         // Gradually increase opacity back to 1
         for (float alpha = 0.0f; alpha <= 1.0f; alpha += Time.deltaTime * fadeSpeed)
         {
-            SetUIAlpha(alpha);
+            SetUIAlpha(alpha, ifSpecial );
             yield return null;
         }
 
         // End the coroutine
         fadeCoroutine = null;
-        SetUIAlpha(1);
+        SetUIAlpha(1, false);
     }
 
     // Helper method to set the alpha value of both UI elements
-    private void SetUIAlpha(float alpha)
+    private void SetUIAlpha(float alpha, bool ifSpecial)
     {
-        if (displayImage != null)
+        if (!ifSpecial)
         {
-            Color imgColor = displayImage.color;
-            imgColor.a = alpha;
-            displayImage.color = imgColor;
+            if (displayImage != null)
+            {
+                Color imgColor = displayImage.color;
+                imgColor.a = alpha;
+                displayImage.color = imgColor;
+            }
         }
+        
 
         if (displayText != null)
         {
