@@ -59,7 +59,11 @@ public class animalManager : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
+        {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            inTutorial = true;
+        }
+            
     }
 
     public void turnStart()
