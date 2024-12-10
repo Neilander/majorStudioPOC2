@@ -995,7 +995,7 @@ MonoBehaviour:
   rollTime: 3
   rollTimePerTurn: 5
   rollText: {fileID: 2120697856}
-  maxTurn: 5
+  maxTurn: 7
   turnText: {fileID: 199242262}
   MonkeyStartPos: {x: -1200, y: -100}
   MonkeyEndPos: {x: -500, y: -100}
@@ -1011,7 +1011,7 @@ MonoBehaviour:
   - These six little animals are about to perform a ball-passing show!
   - These are backup animals that can replace the performers
   - You can roll for new animals or directly start show
-  - The performance will repeat 5 times, and as long as you reach the target performance
+  - The performance will repeat 7 times, and as long as you reach the target performance
     score, you'll succeed!
   - Oh no, the show just stops because performers need rest !
   - Here, take these bananas, click and throw them to performers
