@@ -30,6 +30,7 @@ public class baseAnimalScript : MonoBehaviour
     public int interactionScore = 50;
     public explainType type;
     public anActionExtention ext;
+    public int giveBanana;
 
     //这是展示用的
     private int curState = 0;
@@ -72,6 +73,7 @@ public class baseAnimalScript : MonoBehaviour
         ratioTimer = (1- curR/8)*0.5f + 0.5f;
 
         transform.localScale = baseRatio * ratioTimer;
+        renderer.sortingOrder = Mathf.RoundToInt(-transform.position.y*10 +50);
     }
 
     public void StartState(animalSceneState newState)
@@ -363,9 +365,19 @@ public class baseAnimalScript : MonoBehaviour
         if (ifJustInteract)
         {
 
-            ChangeDisplay(2,false);
-            ChangeRestCount(restTurn);
-            ifJustInteract = false;
+            
+            if (ext != null)
+            {
+                ChangeDisplay(2, false);
+                ext.changeToRest(this);
+                ifJustInteract = false;
+            }
+            else
+            {
+                ChangeDisplay(2, false);
+                ChangeRestCount(restTurn);
+                ifJustInteract = false;
+            }
         }
         else if (curRestTurn <= 1)
         {
@@ -410,6 +422,10 @@ public class baseAnimalScript : MonoBehaviour
         ball.MoveBall(selfIndex, selfIndex+baseIndexAdd);
         ChangeDisplay(1,false);
         ifJustInteract = true;
+        if (giveBanana != 0)
+        {
+            animalManager.Instance.changeBanana(giveBanana);
+        }
         ifHaveBall = false;
         animalManager.Instance.changeScore(interactionScore,selfIndex);
         ifReady = false;

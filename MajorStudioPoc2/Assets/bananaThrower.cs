@@ -60,4 +60,10 @@ public class bananaThrower : MonoBehaviour
         curBanana = maxBanana;
         animalManager.Instance.curLeft.changeLeft(curBanana);
     }
+
+    public void addBanana(int n)
+    {
+        curBanana += n;
+        animalManager.Instance.curLeft.changeLeft(curBanana);
+    }
 }

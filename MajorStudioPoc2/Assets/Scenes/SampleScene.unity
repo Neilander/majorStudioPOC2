@@ -1486,26 +1486,32 @@ MonoBehaviour:
   - Bear will throw the ball to right, and each time he throws it further and earn
     more score.
   - Lion will throw the ball to the performer with the most current rest turns.
+  - Giraffe will throw the ball to the right and gain 5 bananas. Each Time it needs
+    more rest!
   scores:
   - 50
   - 50
   - 100*n
   - 200
+  - 100
   restTurns:
   - 3
   - 2
   - 3
   - 5
+  - 2+n
   forces:
   - +1
   - -2
   - +1*n
   - '?'
+  - +1
   bgs:
   - {fileID: 21300000, guid: f3ec6ad46c6a64f0fbbc234dad251a77, type: 3}
   - {fileID: 21300000, guid: da4d8609510864bb890d6f6e64adcc6f, type: 3}
   - {fileID: 21300000, guid: 207472db9c90d4a828e6e2216d11e838, type: 3}
   - {fileID: 21300000, guid: c56e8cdc966db4f71b593cd4b52bb9a6, type: 3}
+  - {fileID: 21300000, guid: 5875c4617e5de49c5a3e09a6ec1f9ad6, type: 3}
   imgs:
   - {fileID: 1168410923}
   - {fileID: 1593336638}
@@ -4813,7 +4819,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Tiger will throw the ball to the performer with the most current rest turns
+  m_text: Giraffe will throw the ball to the right and gain 5 bananas. Each Time
+    it needs more rest!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ef7034c13c67e471fac960e3319c8647, type: 2}
   m_sharedMaterial: {fileID: -7295643528711751690, guid: ef7034c13c67e471fac960e3319c8647, type: 2}

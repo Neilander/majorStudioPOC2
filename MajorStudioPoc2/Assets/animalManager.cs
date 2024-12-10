@@ -454,4 +454,9 @@ public class animalManager : MonoBehaviour
         }
         return potential[Random.Range(0, potential.Count)];
     }
+
+    public void changeBanana(int n)
+    {
+        thrower.addBanana(n);
+    }
 }
