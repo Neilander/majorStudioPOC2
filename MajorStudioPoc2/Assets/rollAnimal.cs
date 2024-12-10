@@ -64,6 +64,10 @@ public class rollAnimal : MonoBehaviour
     public Vector2 indexFiveMonkeyPos;
     public Vector2 indexFiveDialoguePos;
 
+    public Sprite indexSevenBgImage;
+    public Vector2 indexSevenMonkeyPos;
+    public Vector2 indexSevenDialoguePos;
+
     public Vector2 startDialoguePos;
 
     public Image introBg;
@@ -143,6 +147,13 @@ public class rollAnimal : MonoBehaviour
                     {
                         curIndex += 1;
                         dialogueText.text = dialogues[curIndex];
+
+                        if (curIndex == 7)
+                        {
+                            monkeyUi.GetComponent<RectTransform>().anchoredPosition = indexSevenMonkeyPos;
+                            dialoguePanel.GetComponent<RectTransform>().anchoredPosition = indexSevenDialoguePos;
+                            introBg.sprite = indexSevenBgImage;
+                        }
                     }
                 }
                 else

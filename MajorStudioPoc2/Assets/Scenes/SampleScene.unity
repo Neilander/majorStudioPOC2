@@ -1013,8 +1013,10 @@ MonoBehaviour:
   - You can roll for new animals or directly start show
   - The performance will repeat 5 times, and as long as you reach the target performance
     score, you'll succeed!
-  - I will teach you banana
-  - lalala
+  - Oh no, the show just stops because performers need rest !
+  - Here, take these bananas, click and throw them to performers
+  - And can reduce their rest turn!
+  - Also, throw bananas at the ball can make it go to the next performer
   firstStageIndex: 5
   allButtonsToChangeAble:
   - {fileID: 1405951137}
@@ -1034,6 +1036,9 @@ MonoBehaviour:
   indexFiveBgImage: {fileID: 21300000, guid: 9af44131b472341bcbdfb3fff64b057c, type: 3}
   indexFiveMonkeyPos: {x: -700, y: -400}
   indexFiveDialoguePos: {x: 200, y: 0}
+  indexSevenBgImage: {fileID: 21300000, guid: c08d10d7e69fa494dab274d6c914f4d1, type: 3}
+  indexSevenMonkeyPos: {x: -300, y: -400}
+  indexSevenDialoguePos: {x: 400, y: 200}
   startDialoguePos: {x: 300, y: 200}
   introBg: {fileID: 1223188883}
   allblack: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
@@ -5709,7 +5714,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -700, y: -400}
+  m_AnchoredPosition: {x: -300, y: -400}
   m_SizeDelta: {x: 1723, y: 1847}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1911876261
@@ -6205,7 +6210,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 200, y: 0}
+  m_AnchoredPosition: {x: 400, y: 200}
   m_SizeDelta: {x: 1000, y: 560}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2046767105

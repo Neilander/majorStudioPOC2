@@ -71,7 +71,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   g: 18
   h: 10
-  t: 1
+  t: 0.4
   targetScale: {x: 0.5, y: 0.5, z: 0.5}
   radius: 1
 --- !u!1 &7404383978620692486
@@ -145,7 +145,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1124002595
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   m_Color: {r: 1, g: 0.89550054, b: 0, a: 1}
