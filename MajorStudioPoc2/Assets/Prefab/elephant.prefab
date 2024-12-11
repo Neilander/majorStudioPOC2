@@ -77,6 +77,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6923289616350837719, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
+      propertyPath: restTurn
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6923289616350837719, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
       propertyPath: selfIndex
       value: 4
       objectReference: {fileID: 0}

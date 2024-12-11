@@ -19,6 +19,7 @@ public class startControl : MonoBehaviour
     private Coroutine fadeCoroutine;
     private int curIndex = -1;
     public int loadIndex;
+    public bool alwaysRemain = false;
 
     [Header("测试用")]
     public int toIndex;
@@ -87,7 +88,7 @@ public class startControl : MonoBehaviour
         }
 
         // Start the fade transition
-        fadeCoroutine = StartCoroutine(FadeTransition(index, (index ==0) ||( index ==3)));
+        fadeCoroutine = StartCoroutine(FadeTransition(index, (index ==0) ||( index ==3)|| alwaysRemain));
     }
 
     private IEnumerator FadeTransition(int targetIndex, bool ifSpecial)
