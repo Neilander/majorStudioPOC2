@@ -552,7 +552,7 @@ SpriteRenderer:
   m_SortingLayerID: -1876557249
   m_SortingLayer: -1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 617ebbc02659a49f88e974a119b2b16c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7d0d05378042449969b600550a2fd391, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -2943,6 +2943,7 @@ MonoBehaviour:
   shopPos: []
   isShow: 0
   isShop: 0
+  curDisplay: {fileID: 0}
   curLeft: {fileID: 0}
   canStartShow: 1
   inTutorial: 1
@@ -5548,6 +5549,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 1618116779}
+  tarScore: 5000
 --- !u!1001 &1633330019
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6622,7 +6624,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1800
+  m_text: 5000
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ef7034c13c67e471fac960e3319c8647, type: 2}
   m_sharedMaterial: {fileID: -7295643528711751690, guid: ef7034c13c67e471fac960e3319c8647, type: 2}

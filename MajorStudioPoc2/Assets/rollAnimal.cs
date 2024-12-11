@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class rollAnimal : MonoBehaviour
 {
@@ -347,8 +348,19 @@ public class rollAnimal : MonoBehaviour
     public void inShopStart_WhenTurnStart()
     {
         leftRollTime = rollTimePerTurn + 1;
+        if (curTurn == 0)
+        {
+            animalManager.Instance.inTutorial = true;
+            if (animalManager.Instance.curDisplay.ifWin())
+                SceneManager.LoadScene(2);
+            else
+                SceneManager.LoadScene(3);
+            return;
+        }
+        
         curTurn -= 1;
         turnText.text = curTurn.ToString();
+        
 
         if (!bananaIntroEd)
         {

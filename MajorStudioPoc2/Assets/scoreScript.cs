@@ -7,6 +7,8 @@ public class scoreScript : MonoBehaviour
 {
     public TextMeshProUGUI text;
     private int score; // 当前分数
+
+    public int tarScore;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,5 +31,10 @@ public class scoreScript : MonoBehaviour
         {
             text.text = score.ToString(); // 更新 Text 显示
         }
+    }
+
+    public bool ifWin()
+    {
+        return score >= tarScore;
     }
 }

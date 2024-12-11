@@ -28,7 +28,7 @@ public class animalManager : MonoBehaviour
     public bool isShop;
 
 
-    private scoreScript curDisplay;
+    public scoreScript curDisplay;
     public bananaLeft curLeft;
 
     public bool canStartShow = true;
