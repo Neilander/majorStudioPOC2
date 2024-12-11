@@ -29,6 +29,6 @@ public class anActionExtention : MonoBehaviour
 
     public virtual void changeToRest(baseAnimalScript father)
     {
-
+        father.ChangeRestCount(father.restTurn);
     }
 }

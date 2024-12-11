@@ -31,6 +31,7 @@ public class baseAnimalScript : MonoBehaviour
     public explainType type;
     public anActionExtention ext;
     public int giveBanana;
+    public bool ifRest = true;
 
     //这是展示用的
     private int curState = 0;
@@ -351,13 +352,13 @@ public class baseAnimalScript : MonoBehaviour
             }
             
         }
-        else if(!ifReady)
+        else if(!ifReady && ifRest)
         {
             //如果无球并且在休息状态，就休息减1
             DoRest();
         }
         //否则就什么都不做
-
+        
     }
 
     public void DoTurnEnd()

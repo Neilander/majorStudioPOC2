@@ -178,8 +178,9 @@ public class animalManager : MonoBehaviour
 
     public void changeScore(int n, int index)
     {
-        curDisplay.ChangeScore(n);
-        doScoreAddShow(index, n);
+        curDisplay.ChangeScore(n * (isDouble ? 2 : 1));
+        doScoreAddShow(index, n* (isDouble?2:1));
+        isDouble = false;
     }
 
     public void reportText(TextMeshProUGUI t, int n)
@@ -458,5 +459,11 @@ public class animalManager : MonoBehaviour
     public void changeBanana(int n)
     {
         thrower.addBanana(n);
+    }
+
+    private bool isDouble = false;
+    public void getADouble()
+    {
+        isDouble = true;
     }
 }

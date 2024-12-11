@@ -118,5 +118,6 @@ public enum explainType
     elephant,
     bear,
     tiger,
-    giraffe
+    giraffe,
+    snake
 }
