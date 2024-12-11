@@ -20,6 +20,6 @@ public class bananaLeft : MonoBehaviour
 
     public void changeLeft(int n)
     {
-        text.text = "Banana Left:\n" + n.ToString();
+        text.text = n.ToString();
     }
 }
