@@ -50,10 +50,12 @@ public class rollAnimal : MonoBehaviour
     public Sprite indexTwoBgImage;
     public Vector2 indexTwoMonkeyPos;
     public Vector2 indexTwoDialoguePos;
+    public Sprite indexTwoSpr;
     public Quaternion indexTwoRotation;
     public Sprite indexThreeBgImage;
     public Vector2 indexThreeMonkeyPos;
     public Vector2 indexThreeDialoguePos;
+    public Sprite indexThreeSpr;
     public Quaternion indexThreeRotation;
 
     public Sprite indexFourBgImage;
@@ -63,10 +65,14 @@ public class rollAnimal : MonoBehaviour
     public Sprite indexFiveBgImage;
     public Vector2 indexFiveMonkeyPos;
     public Vector2 indexFiveDialoguePos;
+    
 
     public Sprite indexSevenBgImage;
     public Vector2 indexSevenMonkeyPos;
     public Vector2 indexSevenDialoguePos;
+
+    public Sprite bananaIntroMonkeySprite;
+    public Sprite monkeyAfterBananaIntro;
 
     public Vector2 startDialoguePos;
 
@@ -108,16 +114,20 @@ public class rollAnimal : MonoBehaviour
                     if (curIndex == 2)
                     {
                         monkeyUi.GetComponent<RectTransform>().anchoredPosition = indexTwoMonkeyPos;
-                        monkeyUi.GetComponent<RectTransform>().rotation = indexTwoRotation;
+                        //monkeyUi.GetComponent<RectTransform>().rotation = indexTwoRotation;
+                        monkeyUi.GetComponent<RectTransform>().localScale = new Vector3(-1, 1, 1);
                         dialoguePanel.GetComponent<RectTransform>().anchoredPosition = indexTwoDialoguePos;
                         introBg.sprite = indexTwoBgImage;
+                        monkeyUi.GetComponent<Image>().sprite = indexTwoSpr;
                     }
                     else if (curIndex == 3)
                     {
                         monkeyUi.GetComponent<RectTransform>().anchoredPosition = indexThreeMonkeyPos;
-                        monkeyUi.GetComponent<RectTransform>().rotation = indexThreeRotation;
+                        //monkeyUi.GetComponent<RectTransform>().rotation = indexThreeRotation;
+                        monkeyUi.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
                         dialoguePanel.GetComponent<RectTransform>().anchoredPosition = indexThreeDialoguePos;
                         introBg.sprite = indexThreeBgImage;
+                        monkeyUi.GetComponent<Image>().sprite = indexThreeSpr;
                     }
                     else if (curIndex == 4)
                     {
@@ -148,7 +158,7 @@ public class rollAnimal : MonoBehaviour
                     {
                         curIndex += 1;
                         dialogueText.text = dialogues[curIndex];
-
+                        monkeyUi.GetComponent<Image>().sprite = monkeyAfterBananaIntro;
                         if (curIndex == 7)
                         {
                             monkeyUi.GetComponent<RectTransform>().anchoredPosition = indexSevenMonkeyPos;
@@ -398,6 +408,9 @@ public class rollAnimal : MonoBehaviour
         dialoguePanel.GetComponent<RectTransform>().anchoredPosition = startDialoguePos;
         dialoguePanel.SetActive(false);
         monkeyUi.MoveTo(MonkeyEndPos);
+        if (bananaIntroEd)
+            monkeyUi.GetComponent<Image>().sprite = bananaIntroMonkeySprite;
+
         canClick = false;
     }
 

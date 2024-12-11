@@ -104,6 +104,22 @@ PrefabInstance:
       propertyPath: displaySprites.Array.data[2]
       value: 
       objectReference: {fileID: 21300000, guid: c3d0963191f6649328e49cf3886138d2, type: 3}
+    - target: {fileID: 7451392540706807522, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
+      propertyPath: m_Size.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7451392540706807522, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
+      propertyPath: m_Size.y
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7451392540706807522, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7451392540706807522, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
+      propertyPath: m_Offset.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8403506454095161910, guid: 7af2a74f0a42344feb65c2aac17b5b18, type: 3}
       propertyPath: m_Name
       value: "\u957F\u9888\u9E7F Variant"

@@ -552,7 +552,7 @@ SpriteRenderer:
   m_SortingLayerID: -1876557249
   m_SortingLayer: -1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 08dcf475b35e84b249356ba61b2d7c41, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 617ebbc02659a49f88e974a119b2b16c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1077,7 +1077,7 @@ MonoBehaviour:
   monkeyUi: {fileID: 1911876263}
   maxAngle: -30
   duration: 0.5
-  pivotOffset: {x: 50, y: -200}
+  pivotOffset: {x: 50, y: -300}
   dialoguePanel: {fileID: 2046767103}
   dialogueText: {fileID: 1523966688}
   dialogues:
@@ -1098,22 +1098,26 @@ MonoBehaviour:
   - {fileID: 173065872}
   tutorialPanel: {fileID: 874996592}
   indexTwoBgImage: {fileID: 21300000, guid: f7ec267b6d7254dd68846d2407a527f2, type: 3}
-  indexTwoMonkeyPos: {x: -700, y: 400}
+  indexTwoMonkeyPos: {x: -550, y: 250}
   indexTwoDialoguePos: {x: 240, y: 210}
-  indexTwoRotation: {x: 0, y: 0, z: -70, w: 0}
+  indexTwoSpr: {fileID: 21300000, guid: 0070a2b9e591f40cb8b4f607600689bf, type: 3}
+  indexTwoRotation: {x: 0, y: 0, z: 0, w: 0}
   indexThreeBgImage: {fileID: 21300000, guid: 61303a140b65f492ebef3c5e72c60abe, type: 3}
-  indexThreeMonkeyPos: {x: -600, y: -500}
+  indexThreeMonkeyPos: {x: -600, y: -300}
   indexThreeDialoguePos: {x: 250, y: -450}
+  indexThreeSpr: {fileID: 21300000, guid: 396861d12312a408caf941cff84e07ab, type: 3}
   indexThreeRotation: {x: 0, y: 0, z: 0, w: 0}
   indexFourBgImage: {fileID: 21300000, guid: 78e7dac7903004ad79b530a934f05cff, type: 3}
-  indexFourMonkeyPos: {x: -700, y: -400}
-  indexFourDialoguePos: {x: -200, y: 200}
+  indexFourMonkeyPos: {x: -800, y: -300}
+  indexFourDialoguePos: {x: -113, y: -60}
   indexFiveBgImage: {fileID: 21300000, guid: 71bdb758014b64089b8aaee023c46972, type: 3}
-  indexFiveMonkeyPos: {x: -700, y: -400}
-  indexFiveDialoguePos: {x: 200, y: 0}
+  indexFiveMonkeyPos: {x: -550, y: -380}
+  indexFiveDialoguePos: {x: 200, y: -100}
   indexSevenBgImage: {fileID: 21300000, guid: c08d10d7e69fa494dab274d6c914f4d1, type: 3}
-  indexSevenMonkeyPos: {x: -300, y: -400}
+  indexSevenMonkeyPos: {x: -350, y: -200}
   indexSevenDialoguePos: {x: 400, y: 200}
+  bananaIntroMonkeySprite: {fileID: 21300000, guid: eab3d97e4751b48a8bd9319e22d91d5a, type: 3}
+  monkeyAfterBananaIntro: {fileID: 21300000, guid: 565bbdf7a538547a8aaf9152e3733039, type: 3}
   startDialoguePos: {x: 300, y: 200}
   introBg: {fileID: 1223188883}
   allblack: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
@@ -1558,7 +1562,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 93, y: 85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &351666131
 MonoBehaviour:
@@ -1573,14 +1577,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.8489028, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6045c15171a2a4358a30918c435c581c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3113,7 +3117,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &874996593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6326,15 +6330,15 @@ RectTransform:
   m_GameObject: {fileID: 1911876259}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 874996596}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -300, y: -400}
-  m_SizeDelta: {x: 1723, y: 1847}
+  m_SizeDelta: {x: 604, y: 1003}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1911876261
 MonoBehaviour:
@@ -6356,7 +6360,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4f416f07e7edc467785a58b10dce3acf, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e801d257fed6444e499b664f57fc8648, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
